@@ -3,6 +3,7 @@ import {LightningElement, track} from 'lwc';
 import getProducts from '@salesforce/apex/ProductsController.getProducts'
 export default class ProductsViewer extends LightningElement {
 
+    domainName = 'https://tsarankou-dev-ed--c.documentforce.com/servlet/servlet.FileDownload?file=';
     @track error;
     @track displayProducts = false;
     @track recordsList = [];
@@ -10,23 +11,23 @@ export default class ProductsViewer extends LightningElement {
     connectedCallback() {
         getProducts({})
             .then(result => {
-                console.log(result);
                 for (let key in result) {
+                    var attachmentLink = result[key].isAttachmentExists ? this.domainName + result[key].attachmentId : 'null';
                     this.recordsList.push({
-                        Model: result[key].Car_Model__c.replace('_', ' '),
-                        BuildDate: result[key].Build_Date__c,
-                        Color: result[key].Color__c,
-                        CarType: result[key].Car_Type__c,
-                        Price: result[key].Price__c,
-                        Horsepower: result[key].Horsepower__c,
-                        FuelType: result[key].Fuel_Type__c,
-                        EngineCapacity: result[key].Engine_Capacity__c
+                        Key: result[key].product.Id,
+                        Model: result[key].product.Car_Model__c.replace('_', ' '),
+                        BuildDate: result[key].product.Build_Date__c,
+                        Color: result[key].product.Color__c,
+                        CarType: result[key].product.Car_Type__c,
+                        Price: result[key].product.Price__c,
+                        Horsepower: result[key].product.Horsepower__c,
+                        FuelType: result[key].product.Fuel_Type__c,
+                        EngineCapacity: result[key].product.Engine_Capacity__c,
+                        isAttachmentsExists: result[key].isAttachmentExists,
+                        Attachment: attachmentLink
                     })
                 }
+                this.displayProducts = true;
             })
-    }
-
-    getImageForProduct() {
-        
     }
 }

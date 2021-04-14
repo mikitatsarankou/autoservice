@@ -1,0 +1,15 @@
+.container {
+    padding: 50px;
+}
+.model-name {
+    text-align: center;
+    vertical-align: 5px;
+}
+
+.record-image {
+    text-align: center;
+}
+
+.slds-wrap {
+    background-color: white;
+}

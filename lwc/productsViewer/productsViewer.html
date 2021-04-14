@@ -1,2 +1,24 @@
 <template>
+    <template if:true={displayProducts}>
+        <div class="container">
+            <div class="slds-box slds-p-around_none slds-m-top_x-small slds-m-bottom_medium slds-m-horizontal_none">
+                <lightning-layout multiple-rows>
+                    <template for:each={recordsList} for:item=record>
+                        <lightning-layout-item size=12 small-device-size=6 medium-device-size=4 large-device-size=3
+                                               flexibility="auto" padding="around-small" key={record.Key}
+                                               class=record-item>
+                            <div class=record-image>
+                                <img src={record.Attachment}>
+                            </div>
+                            <p class="model-name">{record.Model}</p>
+                            <p class="model-name">Build date - {record.BuildDate}</p>
+                            <p class="model-name">Price - ${record.Price}</p>
+                            <p class="model-name">Engine capacity - {record.EngineCapacity} l.</p>
+                            <p class="model-name">Horsepower - {record.Horsepower} hp.</p>
+                        </lightning-layout-item>
+                    </template>
+                </lightning-layout>
+            </div>
+        </div>
+    </template>
 </template>
