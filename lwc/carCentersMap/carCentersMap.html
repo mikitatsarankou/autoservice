@@ -1,0 +1,11 @@
+<template>
+    <template if:true={displayMap}>
+        <lightning-map
+                center={center}
+                markers-title="Lunch Gems"
+                map-markers={mapMarkers}
+                onmarkerselect={handleMarkerSelect}
+                selected-marker-value={selectedMarkerValue}>
+        </lightning-map>
+    </template>
+</template>

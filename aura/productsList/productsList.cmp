@@ -1,0 +1,10 @@
+<aura:component>
+    <aura:attribute name="products" type="Product2[]"/>
+        <div class="c-container">
+            <lightning:layout multipleRows="true">
+            	<aura:iteration items="{!v.products}" var="product">
+	                <c:productsItem product="{!product}"/>
+    	        </aura:iteration>
+            </lightning:layout>
+        </div>
+</aura:component>

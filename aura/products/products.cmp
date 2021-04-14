@@ -1,0 +1,26 @@
+<aura:component controller="ProductsController">
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="products" type="Product2[]"/>
+
+    <lightning:layout class="slds-page-header slds-page-header_object-home">
+        <lightning:layoutItem>
+            <lightning:icon iconName="standard:work_order" alternativeText="products"/>
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="horizontal-small">
+            <div class="page-section page-header">
+                <h1 class="slds-text-heading_label">Products</h1>
+                <h2 class="slds-text-heading_medium">LADA</h2>
+            </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+
+    <div class="c-products">
+        <lightning:layout>
+            <lightning:layoutItem>
+                <c:productsList products="{!v.products}"/>
+                <br/>
+                <c:carCentersMap/>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+</aura:component>
