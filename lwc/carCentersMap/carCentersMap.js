@@ -7,12 +7,14 @@ export default class CarCentersMap extends LightningElement {
     @track displayMap = false;
     @track mapMarkers = [];
     @track recordsList = [];
-    @track center = {
+    center = {
         location: {
             Latitude:'53.9006',
             Longitude:'27.5590'
         }
     }
+    zoomLevel = 6;
+
     connectedCallback() {
         getResultList({})
             .then(result => {
@@ -24,7 +26,7 @@ export default class CarCentersMap extends LightningElement {
                             Country: result[key].locationWrapper.country,
                             Street: result[key].locationWrapper.street
                         },
-                        value: result[key].value,
+                        value: result[key].locationWrapper.city,
                         icon: 'standard:account',
                         title: result[key].title,
                         description: result[key].description
@@ -41,6 +43,6 @@ export default class CarCentersMap extends LightningElement {
 
     handleMarkerSelect(event) {
         this.selectedMarkerValue = event.target.selectedMarkerValue;
-
+        thi.s
     }
 }

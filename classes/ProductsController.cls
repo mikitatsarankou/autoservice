@@ -10,8 +10,9 @@ public class ProductsController {
     }
 
     @AuraEnabled(Cacheable = true)
-    public static List<ProductWrapper> getProductsByCity(String city) {
-        List<Product2> products = ProductsService.getProductsByCity(city);
+    public static List<ProductWrapper> getProductsByCity(Object city) {
+        system.debug(city);
+        List<Product2> products = ProductsService.getProductsByCity((String) city);
         return formProductWrappers(products);
     }
 

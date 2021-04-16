@@ -8,15 +8,16 @@ public class CurrencyManager implements Queueable, Database.AllowsCallouts {
     
     public void execute(QueueableContext cxt) {
 		 
-		Http http = new Http();
-		HttpRequest request = new HttpRequest();
+		Http h = new Http();
+		HttpRequest req = new HttpRequest();
         
-		request.setEndpoint(URL.getSalesforceBaseUrl().toExternalForm() + '/services/data/v28.0/sobjects/CurrencyType/');
-		request.setMethod('POST');
-		request.setBody('{ "IsoCode" : "BYN", "DecimalPlaces" : 2, "ConversionRate" : ' + curRate + ', "IsActive" : "true" }');
-		request.setHeader('Authorization', 'OAuth ' + UserInfo.getSessionId());
-		request.setHeader('Content-Type', 'application/json');
+		req.setEndpoint(URL.getSalesforceBaseUrl().toExternalForm() + '/services/data/v28.0/sobjects/CurrencyType/');
+		req.setMethod('POST');       
+		req.setBody('{ "IsoCode" : "BYN", "DecimalPlaces" : 2, "ConversionRate" : ' + curRate + ', "IsActive" : "true" }');
+		req.setHeader('Authorization', 'OAuth ' + UserInfo.getSessionId());
+		req.setHeader('Content-Type', 'application/json');
         
-		HttpResponse res = http.send(request);
+		HttpResponse res = h.send(req);      	
+        
 	}
 }

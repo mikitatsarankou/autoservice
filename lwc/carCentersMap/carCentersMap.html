@@ -1,8 +1,10 @@
 <template>
     <template if:true={displayMap}>
         <lightning-map
+                class=googleMap
+                zoom-level={zoomLevel}
                 center={center}
-                markers-title="Lunch Gems"
+                markers-title="Dealership centers"
                 map-markers={mapMarkers}
                 onmarkerselect={handleMarkerSelect}
                 selected-marker-value={selectedMarkerValue}>

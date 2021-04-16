@@ -1,0 +1,7 @@
+<aura:component description="HeaderComponent" access="global">
+    <div class="header">
+        <div class="lada-div"><h1
+                    style="font-size: 100px; font-weight: 100; position: absolute; margin-left: 6.5%; color: #f1f6f5">
+                LADA</h1></div>
+    </div>
+</aura:component>

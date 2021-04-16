@@ -1,5 +1,5 @@
-<aura:application extends="force:slds">
-    <c:products/>
+<aura:application extends="ltng:outApp" access="GLOBAL">
+    <aura:dependency resource="c:HeaderComponent"/>
+    <aura:dependency resource="productsViewer"/>
+    <aura:dependency resource="carCentersMap"/>
 </aura:application>
-
-<!-- https://tsarankou-dev-ed.lightning.force.com/c/productsApp.app -->

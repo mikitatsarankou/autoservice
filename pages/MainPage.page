@@ -1,0 +1,24 @@
+<apex:page showHeader="false" sideBar="false">
+    <apex:includeLightning />
+
+    <div id="pageId" style="background-color: #f1f6f5;" >
+        <div id="headerId" style="position: inherit; width: 100%; height: 150px; opacity: 0.8;"></div>
+        <div id="ProductsViewerId" style="position: inherit; width: 90%; height: 95%; margin-left: 5%"></div>
+        <div id="CarCentersMapId" style="position: inherit; width: 85%; margin-left: 7.5%"></div>
+    </div>
+    <script>
+        $Lightning.use("c:productsApp", function () {
+            $Lightning.createComponent("c:HeaderComponent", {}, "headerId", function (component) {
+                /*console.log('headerId created')*/
+            });
+            $Lightning.createComponent("c:productsViewer", {}, "ProductsViewerId", function (component) {
+                /*console.log('ProductsViewerId created')*/
+            });
+            $Lightning.createComponent("c:carCentersMap", {}, "CarCentersMapId", function (component) {
+                /*console.log('CarCentersMapId created')*/
+            });
+        });
+    </script>
+</apex:page>
+
+<!--https://tsarankou-dev-ed&#45;&#45;c.visualforce.com/apex/MainPage-->

@@ -19,7 +19,7 @@ public class ProductsManager {
                         Engine_Capacity__c, Fuel_Type__c, Car_Center__r.City__c
                 FROM Product2
                 WHERE Name =: LADA
-                AND Car_Center__r.City__c =: city
+                AND Car_Center__r.City__c LIKE: city + '%'
         ];
     }
 }
