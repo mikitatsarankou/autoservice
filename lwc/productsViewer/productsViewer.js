@@ -1,5 +1,4 @@
 import {LightningElement, track} from 'lwc';
-import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 import getProductsByCity from '@salesforce/apex/ProductsController.getProductsByCity'
 import getProducts from '@salesforce/apex/ProductsController.getProducts'
@@ -10,8 +9,8 @@ export default class ProductsViewer extends LightningElement {
     domainName = 'https://tsarankou-dev-ed--c.documentforce.com/servlet/servlet.FileDownload?file=';
     @track error;
     @track displayProducts = false;
+    @track isStandardCurrency = true;
     @track recordsList = [];
-    @track isLoading = false;
     searchTerm = '';
 
     connectedCallback() {
@@ -21,22 +20,22 @@ export default class ProductsViewer extends LightningElement {
             });
     }
 
+    handleChangeCurrency(event) {
+        this.isStandardCurrency = !this.isStandardCurrency;
+    }
+
     handleInput(event) {
-        this.isLoading = true;
         this.searchTerm = event.detail.value;
-        console.log(this.searchTerm);
         getProductsByCity({city: this.searchTerm})
             .then((results) => {
                 if (results.length !== 0) {
                     this.setterFunction(results);
                 } else {
-                    this.showNotification();
+
                 }
             }).catch(error => {
-                console.log(JSON.parse(JSON.stringify(error)));
                 alert(error);
         });
-        this.isLoading = false;
     }
 
     loadDefault(event) {
@@ -58,6 +57,7 @@ export default class ProductsViewer extends LightningElement {
                 Color: products[key].product.Color__c,
                 CarType: products[key].product.Car_Type__c,
                 Price: products[key].product.Price__c,
+                UsdPrice: products[key].usdPrice,
                 Horsepower: products[key].product.Horsepower__c,
                 FuelType: products[key].product.Fuel_Type__c,
                 EngineCapacity: products[key].product.Engine_Capacity__c,
@@ -66,14 +66,5 @@ export default class ProductsViewer extends LightningElement {
             })
         }
         this.displayProducts = true;
-    }
-
-    showNotification() {
-        const evt = new ShowToastEvent({
-            title: 'sorry',
-            message: 'nothing was found',
-            variant: 'info',
-        });
-        this.dispatchEvent(evt);
     }
 }

@@ -1,43 +1,52 @@
 <template>
     <template if:true={displayProducts}>
-        <lightning-layout class="search-area">
-            <lightning-layout-item padding="small" class="search-layout-item">
-                <lightning-input
-                        type="search"
-                        class="lightning-search-bar"
-                        label="Enter your city"
-                        is-loading={isLoading}
-                        onchange={handleInput}
-                >
-                </lightning-input>
+        <div class="lineup_base">
+            <h1 class="lineup_text">EXPLORE ALL VEHICLES</h1>
+        </div>
+        <div class="search_base">
+            <lightning-input
 
-            </lightning-layout-item>
-            <lightning-layout-item padding="small" class="reset-layout-item">
-                <lightning-button onclick={loadDefault} label='reset' class="slds-button_reset">
-                    TAG
-                </lightning-button>
-            </lightning-layout-item>
-        </lightning-layout>
-
-        <div class="container">
-            <div class="slds-box">
-                <lightning-layout multiple-rows>
-                    <template for:each={recordsList} for:item=record>
-                        <lightning-layout-item size=12 small-device-size=6 medium-device-size=4 large-device-size=3
-                                               flexibility="auto" padding="around-small" key={record.Key}
-                                               class=record-item>
-                            <div class=record-image>
-                                <img src={record.Attachment}>
-                            </div>
-                            <p class="model-name">{record.Model}</p>
-                            <p class="model-name">Build date - {record.BuildDate}</p>
-                            <p class="model-name">Price - ${record.Price}</p>
-                            <p class="model-name">Engine capacity - {record.EngineCapacity} l.</p>
-                            <p class="model-name">Horsepower - {record.Horsepower} hp.</p>
-                        </lightning-layout-item>
-                    </template>
-                </lightning-layout>
+                    type="search"
+                    class="search_area"
+                    label="Enter a specific city"
+                    onchange={handleInput}
+            >
+            </lightning-input>
+            <button class="search_button" onclick={loadDefault}>
+                <h7 class="button_search_text">Reset</h7>
+            </button>
+            <div class="currency-switcher">
+                <label class="slds-checkbox_toggle slds-grid">
+                    <span class="slds-form-element__label slds-m-bottom_none">Currency - $</span>
+                    <input type="checkbox" onclick={handleChangeCurrency} name="checkbox-toggle-16" value="checkbox-toggle-16"
+                           aria-describedby="checkbox-toggle-16"/>
+                    <span id="checkbox-toggle-16" class="slds-checkbox_faux_container" aria-live="assertive">
+                        <span class="slds-checkbox_faux"></span>
+                        <span class="slds-checkbox_on">Enabled</span>
+                        <span class="slds-checkbox_off">Disabled</span>
+                    </span>
+                </label>
             </div>
+        </div>
+
+        <div class="models">
+            <template for:each={recordsList} for:item=record>
+                <div class="card" key={record.Key}>
+                    <div class="record-image">
+                        <img src={record.Attachment} alt={record.Model}>
+                    </div>
+                    <div class="record-info">
+                        <h3 class="record-name">{record.Model}</h3>
+                        <h4 class="record-description">Build date - {record.BuildDate}<br/></h4>
+                        <h4 class="record-price" if:true={isStandardCurrency}>Price - BYR {record.Price}<br/></h4>
+                        <h4 class="record-price" if:false={isStandardCurrency}>Price - $ {record.UsdPrice}<br/></h4>
+                        <h4>Engine capacity - {record.EngineCapacity} l.<br/>
+                            Horsepower - {record.Horsepower} hp.<br/>
+                            VIN - {record.Key}</h4>
+                    </div>
+                </div>
+            </template>
+
         </div>
     </template>
 </template>

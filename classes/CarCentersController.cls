@@ -1,6 +1,12 @@
 public class CarCentersController {
 
     @AuraEnabled(Cacheable = true)
+    public static List<DealershipsWithProductsWrapper> getDealershipsWithProductsWrapper() {
+        List<Car_Center__c> carCenters = getCarCentersLocations();
+        return CarCentersService.getDealershipsWithProductsWrappers(carCenters);
+    }
+
+    @AuraEnabled(Cacheable = true)
     public static List<CarCenterLocationsWrapper> getResultList() {
         List<Car_Center__c> carCenters = getCarCentersLocations();
         return getCarCenterLocationsToDisplayWrappers(carCenters);
@@ -14,6 +20,26 @@ public class CarCentersController {
     @AuraEnabled
     public static List<CarCenterLocationsWrapper> getCarCenterLocationsToDisplayWrappers(List<Car_Center__c> carCenters) {
         return CarCentersService.getCarCenterLocationsToDisplayWrappers(carCenters);
+    }
+
+
+    public class DealershipsWithProductsWrapper {
+        @AuraEnabled
+        public LocationWrapper locationWrapper;
+        @AuraEnabled
+        public List<ProductsController.ProductWrapper> products;
+        @AuraEnabled
+        public String description;
+        @AuraEnabled
+        public String value;
+        @AuraEnabled
+        public String icon;
+        @AuraEnabled
+        public String title;
+
+        public DealershipsWithProductsWrapper() {
+
+        }
     }
 
     public class CarCenterLocationsWrapper {

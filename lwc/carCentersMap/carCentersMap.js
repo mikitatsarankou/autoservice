@@ -17,19 +17,19 @@ export default class CarCentersMap extends LightningElement {
 
     connectedCallback() {
         getResultList({})
-            .then(result => {
-                this.recordsList = result;
-                for (let key in result) {
+            .then(results => {
+                this.recordsList = results;
+                for (let key in results) {
                     this.mapMarkers.push({
                         location: {
-                            City: result[key].locationWrapper.city,
-                            Country: result[key].locationWrapper.country,
-                            Street: result[key].locationWrapper.street
+                            City: results[key].locationWrapper.city,
+                            Country: results[key].locationWrapper.country,
+                            Street: results[key].locationWrapper.street
                         },
-                        value: result[key].locationWrapper.city,
+                        value: results[key].locationWrapper.city,
                         icon: 'standard:account',
-                        title: result[key].title,
-                        description: result[key].description
+                        title: results[key].title,
+                        description: results[key].description
                     });
                 }
                 this.displayMap = true;
@@ -43,6 +43,5 @@ export default class CarCentersMap extends LightningElement {
 
     handleMarkerSelect(event) {
         this.selectedMarkerValue = event.target.selectedMarkerValue;
-        thi.s
     }
 }

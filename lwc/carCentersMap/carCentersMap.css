@@ -1,3 +1,12 @@
 .googleMap {
+    max-height: 100%;
+    border: 0.5px solid #5f5f5f26;
+    border-radius: 20px;
+}
 
+.text {
+    text-align: center;
+    font-size: 50px;
+    color: #5f5f5f;
+    font-weight: 100;
 }

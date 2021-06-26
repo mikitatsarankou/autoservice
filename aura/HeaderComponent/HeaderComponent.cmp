@@ -1,7 +1,21 @@
 <aura:component description="HeaderComponent" access="global">
-    <div class="header">
-        <div class="lada-div"><h1
-                    style="font-size: 100px; font-weight: 100; position: absolute; margin-left: 6.5%; color: #f1f6f5">
-                LADA</h1></div>
+    <div class="header_base">
+        <div class="header">
+            <div class="left_side">
+                <div class="header_title">
+                    <h1 class="header_title_text ">
+                        {!$Label.c.dealership_name_label}
+                    </h1>
+                </div>
+            </div>
+            <div class="header_nav_base">
+                <ul class="header_nav ">
+                    <li class="nav_link1 nav_text"><a href="#dealership-link">{!$Label.c.dealership_centers_label}</a></li>
+                    <li class="nav_link2 nav_text">{!$Label.c.Contact_us_label}</li>
+                    <li class="nav_link4 nav_text">{!$Label.c.About_us_label}</li>
+                    <li class="nav_link3 nav_text">{!$Label.c.Follow_us_label}</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </aura:component>
