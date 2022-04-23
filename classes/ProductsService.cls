@@ -1,6 +1,7 @@
 public class ProductsService {
 
     private static final String PRESENTABLE_PHOTO_DESCRIPTION = 'presentable photo';
+    private static final String DEFAULT_ISO_CODE = 'EUR';
 
     public static Product2 getProductById(List<Id> productsIds) {
         return ProductsManager.getProductById(productsIds);
@@ -17,6 +18,59 @@ public class ProductsService {
         return ProductsManager.getProductsByCarCenterId(carCenterId);
     }
 
+    public static List<ProductsController.ProductWrapper> getProductsWithNewCurrencyPrice(List<ProductsController.ProductWrapper> currentProcutsToChange, String newIsoCode, String oldIsoCode) {
+        if (String.isNotBlank(newIsoCode) && String.isNotBlank(oldIsoCode)) {
+            if (newIsoCode == DEFAULT_ISO_CODE) {
+                List<String> isoCodes = new List<String>{oldIsoCode};
+                List<CurrencyType> currencies = CurrencyService.getCurrenciesByIsoCodes(isoCodes);
+
+                if (!currencies.isEmpty()) {
+                    for (ProductsController.ProductWrapper productWrapper : currentProcutsToChange) {
+                        Decimal priceToSet = productWrapper.product.Price__c / currencies[0].ConversionRate;
+                        productWrapper.product.Price__c = priceToSet.setScale(2);
+                    }
+                }
+            }
+
+            if (oldIsoCode == DEFAULT_ISO_CODE) {
+                List<String> isoCodes = new List<String>{newIsoCode};
+                List<CurrencyType> currencies = CurrencyService.getCurrenciesByIsoCodes(isoCodes);
+
+                if (!currencies.isEmpty()) {
+                    for (ProductsController.ProductWrapper productWrapper : currentProcutsToChange) {
+                        Decimal priceToSet = productWrapper.product.Price__c * currencies[0].ConversionRate;
+                        productWrapper.product.Price__c = priceToSet.setScale(2);
+                    }
+                }
+            }
+
+            if (oldIsoCode != DEFAULT_ISO_CODE && newIsoCode != DEFAULT_ISO_CODE) {
+                List<String> isoCodes = new List<String>{newIsoCode, oldIsoCode};
+                List<CurrencyType> currencies = CurrencyService.getCurrenciesByIsoCodes(isoCodes);
+
+                CurrencyType oldCurrency;
+                CurrencyType newCurrency;
+
+                if (!currencies.isEmpty()) {
+                    for (CurrencyType currencyType : currencies) {
+                        if (currencyType.isoCode == newIsoCode) {
+                            newCurrency = currencyType;
+                        } else if (currencyType.isoCode == oldIsoCode) {
+                            oldCurrency = currencyType;
+                        }
+                    }
+                
+                    for (ProductsController.ProductWrapper productWrapper : currentProcutsToChange) {
+                        Decimal euroPrice = productWrapper.product.Price__c / oldCurrency.ConversionRate;
+                        Decimal priceToSet = euroPrice * newCurrency.ConversionRate;
+                        productWrapper.product.Price__c = priceToSet.setScale(2);
+                    }
+                }
+            }        
+        }
+        return currentProcutsToChange;
+    }
+
     public static List<ProductsController.ProductWrapper> formProductWrappers(List<Product2> products) {
         List<ProductsController.ProductWrapper> productWrappers = new List<ProductsController.ProductWrapper>();
         List<Attachment> attachments = AttachmentsManager.getAttachmentsByParentIdsAndDescription(Utils.getFieldIds(products, 'Id'), PRESENTABLE_PHOTO_DESCRIPTION);
@@ -26,8 +80,7 @@ public class ProductsService {
             productWrapper.product = product;
             if (attachmentsByParentId.containsKey(product.Id)) {
                 productWrapper.attachmentId = (String) attachmentsByParentId.get(product.Id).get('Id');
-                productWrapper.isAttachmentExists = true;
-                productWrapper.usdPrice = CurrencyManager.getUsdPrice(product.Price__c);
+                productWrapper.isAttachmentExists = true;                
             }
             productWrappers.add(productWrapper);
         }

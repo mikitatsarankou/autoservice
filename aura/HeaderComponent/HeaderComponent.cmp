@@ -10,7 +10,7 @@
             </div>
             <div class="header_nav_base">
                 <ul class="header_nav ">
-                    <li class="nav_link1 nav_text"><a href="#dealership-link">{!$Label.c.dealership_centers_label}</a></li>
+                    <li class="nav_link1 nav_text">{!$Label.c.dealership_centers_label}</li>
                     <li class="nav_link2 nav_text">{!$Label.c.Contact_us_label}</li>
                     <li class="nav_link4 nav_text">{!$Label.c.About_us_label}</li>
                     <li class="nav_link3 nav_text">{!$Label.c.Follow_us_label}</li>

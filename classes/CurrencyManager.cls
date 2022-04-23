@@ -20,11 +20,13 @@ public class CurrencyManager implements Queueable, Database.AllowsCallouts {
 		HttpResponse res = h.send(req);
 	}
 
-	public static Decimal getUsdPrice(Decimal standardPrice) {
-		List<CurrencyType> currencyTypes = [SELECT IsoCode, IsActive, ConversionRate FROM CurrencyType WHERE IsoCode = 'USD' AND IsActive = true];
-		Decimal priceToReturn = standardPrice * currencyTypes[0].ConversionRate;
-		return priceToReturn.setScale(DECIMAL_SCALE);
-	}
+    public static List<CurrencyType> getCurrencies() {
+        return [SELECT Id, IsoCode, IsActive, ConversionRate FROM CurrencyType WHERE IsActive = true];
+    }
+	
+    public static List<CurrencyType> getCurrenciesByIsoCodes(List<String> isoCodes) {
+        return [SELECT Id, IsoCode, IsActive, ConversionRate FROM CurrencyType WHERE IsoCode IN:isoCodes AND IsActive = true];
+    }
 
 	public static List<NBRB_Api__c> getActiveNBRBApis() {
 		return [SELECT Exchange_Rate_Uri__c, Currency_Name__c, isActive__c FROM NBRB_Api__c WHERE isActive__c = true];

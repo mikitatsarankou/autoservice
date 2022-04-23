@@ -39,4 +39,22 @@ public class CurrencyService {
             }
         }
     }
+
+    public static List<CurrencyController.CurrencyWrapper> formCurrencyWrapper(List<CurrencyType> currencies) {
+        List<CurrencyController.CurrencyWrapper> currencyWrappers = new List<CurrencyController.CurrencyWrapper>();
+        for (CurrencyType currencyType : currencies) {
+            CurrencyController.CurrencyWrapper currencyWrapper = new CurrencyController.CurrencyWrapper();
+            currencyWrapper.isoCode = currencyType.IsoCode;   
+            currencyWrappers.add(currencyWrapper);
+        }
+        return currencyWrappers;
+    }
+
+    public static List<CurrencyType> getCurrencies() {
+        return CurrencyManager.getCurrencies();
+    }
+
+    public static List<CurrencyType> getCurrenciesByIsoCodes(List<String> isoCodes) {
+        return CurrencyManager.getCurrenciesByIsoCodes(isoCodes);
+    }
 }

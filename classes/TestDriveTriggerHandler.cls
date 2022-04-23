@@ -5,7 +5,7 @@ public class TestDriveTriggerHandler extends TriggerHandler {
     }
 
     protected override void beforeInsert() {
-        sendEmail(trigger.new);
+        //sendEmail(trigger.new);
     }
 
     private void sendEmail(List<Test_Drive__c> testDrives) {

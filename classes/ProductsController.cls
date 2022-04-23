@@ -18,11 +18,25 @@ public class ProductsController {
         return ProductsService.formProductWrappers(products);
     }
 
+    @AuraEnabled(Cacheable = true)
+    public static List<ProductWrapper> getProductsWithNewCurrencyPrice(String currentProcutsToChangeJSON, String newIsoCode, String oldIsoCode) {
+        System.debug(currentProcutsToChangeJSON);
+        List<ProductWrapper> currentProcutsToChange = JSON2ProductWrapperList(currentProcutsToChangeJSON);
+        System.debug(currentProcutsToChange);
+        return ProductsService.getProductsWithNewCurrencyPrice(currentProcutsToChange, newIsoCode, oldIsoCode);
+    }
+
+    public static List<ProductWrapper> JSON2ProductWrapperList(String json) {
+        return (List<ProductWrapper>) System.JSON.deserialize(json, List<ProductWrapper>.class);
+    }
+
+    public static ProductWrapper JSON2ProductWrapper(String json) {
+        return (ProductWrapper) System.JSON.deserialize(json, ProductWrapper.class);
+    }
+
     public class ProductWrapper {
         @AuraEnabled
         public Product2 product;
-        @AuraEnabled
-        public Decimal usdPrice;
         @AuraEnabled
         public Boolean isAttachmentExists;
         @AuraEnabled
