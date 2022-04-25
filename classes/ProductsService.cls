@@ -1,7 +1,7 @@
 public class ProductsService {
 
     private static final String PRESENTABLE_PHOTO_DESCRIPTION = 'presentable photo';
-    private static final String DEFAULT_ISO_CODE = 'EUR';
+    private static final String CORPORATE_CURRENCY = 'PLN';
 
     public static Product2 getProductById(List<Id> productsIds) {
         return ProductsManager.getProductById(productsIds);
@@ -20,31 +20,31 @@ public class ProductsService {
 
     public static List<ProductsController.ProductWrapper> getProductsWithNewCurrencyPrice(List<ProductsController.ProductWrapper> currentProcutsToChange, String newIsoCode, String oldIsoCode) {
         if (String.isNotBlank(newIsoCode) && String.isNotBlank(oldIsoCode)) {
-            if (newIsoCode == DEFAULT_ISO_CODE) {
+            if (newIsoCode == CORPORATE_CURRENCY) {
                 List<String> isoCodes = new List<String>{oldIsoCode};
                 List<CurrencyType> currencies = CurrencyService.getCurrenciesByIsoCodes(isoCodes);
 
                 if (!currencies.isEmpty()) {
                     for (ProductsController.ProductWrapper productWrapper : currentProcutsToChange) {
-                        Decimal priceToSet = productWrapper.product.Price__c / currencies[0].ConversionRate;
-                        productWrapper.product.Price__c = priceToSet.setScale(2);
+                        Decimal priceToSet = productWrapper.product.Price__c * currencies[0].ConversionRate;
+                        productWrapper.product.Price__c = priceToSet.setScale(0);
                     }
                 }
             }
 
-            if (oldIsoCode == DEFAULT_ISO_CODE) {
+            if (oldIsoCode == CORPORATE_CURRENCY) {
                 List<String> isoCodes = new List<String>{newIsoCode};
                 List<CurrencyType> currencies = CurrencyService.getCurrenciesByIsoCodes(isoCodes);
 
                 if (!currencies.isEmpty()) {
                     for (ProductsController.ProductWrapper productWrapper : currentProcutsToChange) {
-                        Decimal priceToSet = productWrapper.product.Price__c * currencies[0].ConversionRate;
-                        productWrapper.product.Price__c = priceToSet.setScale(2);
+                        Decimal priceToSet = productWrapper.product.Price__c / currencies[0].ConversionRate;
+                        productWrapper.product.Price__c = priceToSet.setScale(0);
                     }
                 }
             }
 
-            if (oldIsoCode != DEFAULT_ISO_CODE && newIsoCode != DEFAULT_ISO_CODE) {
+            if (oldIsoCode != CORPORATE_CURRENCY && newIsoCode != CORPORATE_CURRENCY) {
                 List<String> isoCodes = new List<String>{newIsoCode, oldIsoCode};
                 List<CurrencyType> currencies = CurrencyService.getCurrenciesByIsoCodes(isoCodes);
 
@@ -61,9 +61,9 @@ public class ProductsService {
                     }
                 
                     for (ProductsController.ProductWrapper productWrapper : currentProcutsToChange) {
-                        Decimal euroPrice = productWrapper.product.Price__c / oldCurrency.ConversionRate;
-                        Decimal priceToSet = euroPrice * newCurrency.ConversionRate;
-                        productWrapper.product.Price__c = priceToSet.setScale(2);
+                        Decimal corporatePrice = productWrapper.product.Price__c * oldCurrency.ConversionRate;
+                        Decimal priceToSet = corporatePrice / newCurrency.ConversionRate;
+                        productWrapper.product.Price__c = priceToSet.setScale(0);
                     }
                 }
             }        
