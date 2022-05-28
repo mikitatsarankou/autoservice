@@ -1,0 +1,31 @@
+{
+  "name": "dealership_app",
+  "private": true,
+  "version": "1.0",
+  "description": "dealership_add",
+  "scripts": {
+    "test": "npm run test:unit",
+    "test:unit": "sfdx-lwc-jest --skipApiVersionCheck",
+    "test:unit:watch": "sfdx-lwc-jest --watchAll",
+    "test:unit:debug": "sfdx-lwc-jest --debug",
+    "test:unit:coverage": "sfdx-lwc-jest --coverage --skipApiVersionCheck",
+    "test:ci": "sfdx-lwc-jest --skipApiVersionCheck -- --silent --reporters=\"jest-junit\" --coverage"
+  },
+  "jest-junit": {
+    "outputDirectory": "e2e/test-management-plugin/test_reports/lwc",
+    "outputName": "lwc-jest-junit.xml"
+  },
+  "devDependencies": {
+    "@lwc/eslint-plugin-lwc": "^1.0.1",
+    "@prettier/plugin-xml": "^0.7.2",
+    "@salesforce/eslint-config-lwc": "^2.1.1",
+    "@salesforce/eslint-plugin-lightning": "^0.1.1",
+    "@salesforce/sfdx-lwc-jest": "^1.1.0",
+    "@salesforce/wire-service-jest-util": "^4.0.0",
+    "@jest/types": "^28.1.0",
+    "jest-junit": "^12.0.0",
+    "jest-junit-reporter": "^1.1.0",
+    "prettier": "^2.2.0",
+    "prettier-plugin-apex": "^1.4.0"
+  }
+}

@@ -1,0 +1,41 @@
+[
+  {
+    "Key":"01t2w000007VhHHAA0",
+    "Model":"Audi A4 Sedan 2019",
+    "BuildDate":"2017-10-01",
+    "Color":"Blue",
+    "CarType":"Sedan",
+    "Price":7199,
+    "Horsepower":121,
+    "FuelType":"Gasoline",
+    "EngineCapacity":"2.0",
+    "isAttachmentsExists":true,
+    "Attachment":"https://tsarankou-dev-ed--c.documentforce.com/servlet/servlet.FileDownload?file=00P2w000009LlhMEAS"
+  },
+  {
+    "Key":"01t2w000007VhHLAA0",
+    "Model":"Audi A4 Sedan 2019",
+    "BuildDate":"2018-10-01",
+    "Color":"Red",
+    "CarType":"Sedan",
+    "Price":5799,
+    "Horsepower":87,
+    "FuelType":"Gasoline",
+    "EngineCapacity":"1.6",
+    "isAttachmentsExists":true,
+    "Attachment":"https://tsarankou-dev-ed--c.documentforce.com/servlet/servlet.FileDownload?file=00P2w000009Lli5EAC"
+  },
+  {
+    "Key":"01t2w000007VhHRAA0",
+    "Model":"Audi A4 Avant",
+    "BuildDate":"2019-10-01",
+    "Color":"White",
+    "CarType":"Sedan",
+    "Price":6599,
+    "Horsepower":143,
+    "FuelType":"Gasoline",
+    "EngineCapacity":"2.2",
+    "isAttachmentsExists":true,
+    "Attachment":"https://tsarankou-dev-ed--c.documentforce.com/servlet/servlet.FileDownload?file=00P2w000009LlhWEAS"
+  }
+]
