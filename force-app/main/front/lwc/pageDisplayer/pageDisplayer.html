@@ -1,0 +1,31 @@
+<template>
+    <div class="language-switcher">
+        <div if:false={useDefaultLanguage}>
+            <label class="slds-checkbox_toggle slds-grid">
+                <span class="slds-form-element__label slds-m-bottom_none">ENG</span>
+
+                <input type="checkbox" checked="checked" onclick={handleChangeLanguage} name="checkbox-toggle-2" value="checkbox-toggle-2"
+                       aria-describedby="checkbox-toggle-2"/>
+                <span id="checkbox-toggle-2" class="slds-checkbox_faux_container" aria-live="assertive">
+                        <span class="slds-checkbox_faux"></span>
+                        <span class="slds-checkbox_on">Enabled</span>
+                        <span class="slds-checkbox_off">Disabled</span>
+                    </span>
+            </label>
+        </div>
+
+        <div if:true={useDefaultLanguage}>
+            <label class="slds-checkbox_toggle slds-grid">
+                <span class="slds-form-element__label slds-m-bottom_none">ENG</span>
+
+                <input type="checkbox" onclick={handleChangeLanguage} name="checkbox-toggle-1" value="checkbox-toggle-1"
+                       aria-describedby="checkbox-toggle-1"/>
+                <span id="checkbox-toggle-1" class="slds-checkbox_faux_container" aria-live="assertive">
+                        <span class="slds-checkbox_faux"></span>
+                        <span class="slds-checkbox_on">Enabled</span>
+                        <span class="slds-checkbox_off">Disabled</span>
+                    </span>
+            </label>
+        </div>
+    </div>
+</template>

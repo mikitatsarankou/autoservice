@@ -1,0 +1,16 @@
+.language-switcher {
+    position: fixed;
+    right: 0;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.slds-checkbox_faux {
+    --slds-c-checkbox-toggle-color-background: red !important;
+    --slds-c-checkbox-toggle-color-border: red !important;
+}
+
+.slds-checkbox--faux {
+    --slds-c-checkbox-toggle-color-background: red !important;
+    --slds-c-checkbox-toggle-color-border: red !important;
+}

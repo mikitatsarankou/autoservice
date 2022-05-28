@@ -1,0 +1,79 @@
+.contact-us-and-about-us {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100%;
+    width: 100%;
+}
+.contact-us-text {
+    text-align: center;
+    font-size: 50px;
+    color: #5f5f5f;
+    font-weight: 100;
+}
+.contact-us {
+    width: 50%;
+}
+.about-us {
+    width: 50%;
+}
+
+.about-us-text {
+    text-align: center;
+    font-size: 50px;
+    color: #5f5f5f;
+    font-weight: 100;
+}
+
+.about-us-body {
+    padding: 1%;
+}
+
+.case-creator {
+    border: 0.5px solid #5f5f5f26;
+    border-radius: 20px;
+    display: flex;
+    flex-flow: column;
+    background-color: #fff;
+    font-weight: 100;
+    padding: 2%;
+    width: 75%;
+    margin-left: 12.5%;
+}
+
+.send-button {
+    width: 10%;
+    background: white;
+    color: #5f5f5f;
+    border: 0.2px solid #5f5f5f26;
+    border-radius: 5px;
+}
+
+.send-button:focus {
+    outline: none;
+}
+.send-button-base {
+    padding-top: 2.5%;
+    display: flex;
+    justify-content: center;
+}
+
+.send-button:hover {
+    background: #5f5f5f;
+    color: #F1F6F5;
+    border: 0.2px solid #5f5f5f;
+}
+
+.toast-base {
+    margin-top: 1%;
+    text-align: center;
+}
+
+.toast-warning {
+    background: #e28080;
+    border-radius: 5px;
+}
+
+.toast-success {
+    background: #bbe582;
+    border-radius: 5px;
+}

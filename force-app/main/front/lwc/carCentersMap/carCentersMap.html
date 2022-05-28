@@ -1,0 +1,16 @@
+<template>
+    <template if:true={displayMap}>
+        <div class="text-base">
+            <h1 class="text"><a name="dealership-link"></a>DEALERSHIP CENTERS</h1>
+        </div>
+        <lightning-map
+                class=googleMap
+                zoom-level={zoomLevel}
+                center={center}
+                markers-title="Dealership centers"
+                map-markers={mapMarkers}
+                onmarkerselect={handleMarkerSelect}
+                selected-marker-value={selectedMarkerValue}>
+        </lightning-map>
+    </template>
+</template>

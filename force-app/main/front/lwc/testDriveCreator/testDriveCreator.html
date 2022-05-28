@@ -1,0 +1,134 @@
+<template>
+    <template if:true={displayTestDrive}>
+        <div class="test-drive-base">
+            <div class="test-drive">
+                <h1 class="test-drive-text">TEST DRIVE</h1>
+            </div>
+            <div class="test-drive-creator">
+
+                <div class="name-base">
+                    <lightning-input
+                            required
+                            max-length={maxLengthName}
+                            type="text"
+                            class="name-area"
+                            value={name}
+                            label="Enter your name"
+                            onchange={handleNameInput}
+                            validity={}
+                    >
+                    </lightning-input>
+                </div>
+
+                <div class="surname-base">
+                    <lightning-input
+                            required
+                            max-length={maxLengthSurname}
+                            type="text"
+                            class="surname-area"
+                            value={surname}
+                            label="Enter your surname"
+                            onchange={handleSurnameInput}
+                    >
+                    </lightning-input>
+                </div>
+
+                <div class="phone-base">
+                    <lightning-input
+                            required
+                            type="tel"
+                            value="+375"
+                            class="phone-area"
+                            label="Enter your phone"
+                            pattern="[+][0-9]{12}"
+                            onchange={handlePhoneInput}
+                    >
+                    </lightning-input>
+                </div>
+
+                <div class="email-base">
+                    <lightning-input
+                            required
+                            max-length={maxLengthEmail}
+                            type="email"
+                            class="email-area"
+                            value={email}
+                            label="Enter your email"
+                            onchange={handleEmailInput}
+                    >
+                    </lightning-input>
+                </div>
+
+                <div class="language-base">
+                    <lightning-combobox
+                            required
+                            class="language-area"
+                            label="Choose preferred language"
+                            value={language}
+                            options={languageOptions}
+                            onchange={handleLanguageInput}
+                    >
+                    </lightning-combobox>
+                </div>
+
+                <div class="dealership-base" onclick={handleDealershipsLoad}>
+                    <lightning-combobox
+                            required
+                            class="dealership-area"
+                            label="Choose dealership"
+                            value={selectedDealershipId}
+                            options={dealershipsOptions}
+                            onchange={handleDealershipInput}
+                    >
+                    </lightning-combobox>
+                </div>
+
+                <div class="choose-car-base" onclick={handleCarLoad}>
+                    <lightning-combobox
+                            required
+                            class="choose-car-area"
+                            label="Choose car"
+                            value={selectedProductId}
+                            options={carsOptions}
+                            onchange={handleCarInput}
+                    >
+                    </lightning-combobox>
+                </div>
+
+                <div class="date-base">
+                    <lightning-input
+                            required
+                            type="datetime"
+                            class="date-area"
+                            value={today}
+                            max={maxDate}
+                            min={minDate}
+                            onchange={handleDateInput}
+                    >
+                    </lightning-input>
+                </div>
+
+                <div class="send-button-base">
+                    <button class="send-button" onclick={handleSendButton}>
+                        <h7 class="button_search_text">Send</h7>
+                    </button>
+                </div>
+
+                <div class="toast-base">
+                    <div if:true={displayDateBookedMessage} class="toast-date-warning" onclick={closeToast}>
+                        <p>Such date already booked, please, choose another time.</p>
+                    </div>
+                    <div if:true={displayErrorMessage} class="toast-error" onclick={closeToast}>
+                        <p>Please, fill all required fields.</p>
+                    </div>
+                    <div if:true={displayWarningMessage} class="toast-warning" onclick={closeToast}>
+                        <p>Something went wrong, please, contact to administrator.</p>
+                    </div>
+                    <div if:true={displaySuccessMessage} class="toast-success" onclick={closeToast}>
+                        <p>Your request has been successfully sent!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>
