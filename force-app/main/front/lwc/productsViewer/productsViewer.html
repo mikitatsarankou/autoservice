@@ -3,50 +3,13 @@
         <div class="lineup-text">EXPLORE ALL VEHICLES</div>
     </div>
 
-    <div class="search-and-currency-base-wrapper">
-        <div class="search-and-currency-base">
-            <div class="search-base">
-                <lightning-input
-                        data-id="search"
-                        type="search"
-                        class="search-area"
-                        label="Enter a specific city"
-                        onchange={handleInput}
-                        value={searchTerm}
-                >
-                </lightning-input>
-            </div>
-            <div class="reset-base">
-                <button class="reset-button" onclick={loadDefault}>
-                    <h7 class="button-search-text">Reset</h7>
-                </button>
-            </div>
+    <c-products-customization-section
+            oncityinput={handleCityInput}
+            onloaddefault={loadDefault}
+            oncurrencychange={handleCurrencyChange}
+            ondisplaypriceschange={handleDisplayPricesChange}>
+    </c-products-customization-section>
 
-            <div class="currency-switcher-base">
-                <div class="currency-switcher">
-                    <lightning-combobox
-                            class="currency-switcher-button"
-                            label="Currency"
-                            value={currentCurrency}
-                            options={currencyOptions}
-                            onchange={handleChangeCurrency}
-                    >
-                    </lightning-combobox>
-                </div>
-            </div>
-
-            <!--            <div class="dropdown-base">-->
-            <!--               <button class="dropdown-button" onclick={loadDefault}>-->
-            <!--                    <h7 class="dropdown-button-text">{currentCurrency}</h7>-->
-            <!--                </button>-->
-            <!--                <div class="dropdown-content">-->
-            <!--                   <template for:each={currencyOptions} for:item=record>-->
-            <!--                       <div class="dropdown-value" key={record.value}>{record.label}</div>-->
-            <!--                   </template>-->
-            <!--                </div>-->
-            <!--            </div>  -->
-        </div>
-    </div>
     <template if:true={displayProducts}>
         <div class="slider">
             <div class="slider-visible">

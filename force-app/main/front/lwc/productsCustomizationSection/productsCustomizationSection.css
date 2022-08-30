@@ -1,0 +1,47 @@
+@font-face {
+    font-family: 'MerriweatherLight';
+    src: url(/resource/MerriweatherLight);
+}
+
+.search-and-currency-base-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.search-and-currency-base {
+    display: flex;
+    justify-content: space-between;
+    width: 18%;
+    padding-bottom: 1%;
+}
+
+.search-area {
+    width: 150px;
+    font-family: 'MerriweatherLight';
+    --slds-c-input-color-background: whitesmoke;
+    --slds-c-input-color-border: rgb(0, 0, 0);
+    --slds-c-input-color-background-focus: rgb(255, 0, 0);
+    --slds-c-input-color-border-focus: rgb(255, 0, 0);
+    --slds-c-input-radius-border: 0.25rem;
+    --slds-c-input-text-color: rgb(255, 0, 0);
+    --slds-c-input-text-color-focus: rgb(0, 0, 0);
+    --slds-c-input-shadow-focus: 0 0 3px #ff0000;
+}
+
+.reset-button {
+    font-family: 'MerriweatherLight';
+    color: black;
+    transition: 0.25s all ease-out;
+    height: 32px;
+    margin-top: 24px;
+    background: whitesmoke;
+    border: 1px solid black;
+    border-radius: 0.25rem;
+}
+
+.reset-button:focus {
+    box-shadow: 0 0 3px red;
+    border: 1px solid red;
+    background: whitesmoke;
+    outline: none;
+}
