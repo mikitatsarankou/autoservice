@@ -46,4 +46,18 @@ public class ProductsManager {
         }
         return null;
     }
+
+    public static List<Product2> getProductsByIds(List<Id> ids) {
+        List<Product2> product2 = [
+                SELECT Id, Car_Model__c, Build_Date__c,
+                        Price__c, Car_Type__c, Color__c, Horsepower__c,
+                        Engine_Capacity__c, Fuel_Type__c, Car_Center__c
+                FROM Product2
+                WHERE Id IN: ids
+        ];
+        if (!product2.isEmpty()) {
+            return product2;
+        }
+        return null;
+    }
 }
