@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
-    <apiVersion>51.0</apiVersion>
-    <description>Case Creator And About Us</description>
+    <apiVersion>54.0</apiVersion>
+    <description>Products Customization Section</description>
     <isExposed>true</isExposed>
-    <masterLabel>Case Creator And About Us</masterLabel>
+    <masterLabel>Products Customization Section</masterLabel>
     <targets>
         <target>lightning__AppPage</target>
     </targets>

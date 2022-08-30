@@ -3,9 +3,14 @@ public class ProductsService {
     private static final String PRESENTABLE_PHOTO_DESCRIPTION = 'presentable photo';
     private static final String CORPORATE_CURRENCY = 'PLN';
 
-    public static Product2 getProductById(List<Id> productsIds) {
-        return ProductsManager.getProductById(productsIds);
+    public static Product2 getProductById(List<Id> productId) {
+        return ProductsManager.getProductById(productId);
     }
+
+    public static List<Product2> getProductsByIds(List<Id> productsIds) {
+        return ProductsManager.getProductsByIds(productsIds);
+    }
+
     public static List<Product2> getProducts() {
         return ProductsManager.getProducts();
     }
@@ -18,14 +23,14 @@ public class ProductsService {
         return ProductsManager.getProductsByCarCenterId(carCenterId);
     }
 
-    public static List<ProductsController.ProductWrapper> getProductsWithNewCurrencyPrice(List<ProductsController.ProductWrapper> currentProcutsToChange, String newIsoCode, String oldIsoCode) {
+    public static List<ProductsController.ProductWrapper> getProductsWithNewCurrencyPrice(List<ProductsController.ProductWrapper> currentProductsToChange, String newIsoCode, String oldIsoCode) {
         if (String.isNotBlank(newIsoCode) && String.isNotBlank(oldIsoCode)) {
             if (newIsoCode == CORPORATE_CURRENCY) {
                 List<String> isoCodes = new List<String>{oldIsoCode};
                 List<CurrencyType> currencies = CurrencyService.getCurrenciesByIsoCodes(isoCodes);
 
                 if (!currencies.isEmpty()) {
-                    for (ProductsController.ProductWrapper productWrapper : currentProcutsToChange) {
+                    for (ProductsController.ProductWrapper productWrapper : currentProductsToChange) {
                         Decimal priceToSet = productWrapper.product.Price__c * currencies[0].ConversionRate;
                         productWrapper.product.Price__c = priceToSet.setScale(0);
                     }
@@ -37,7 +42,7 @@ public class ProductsService {
                 List<CurrencyType> currencies = CurrencyService.getCurrenciesByIsoCodes(isoCodes);
 
                 if (!currencies.isEmpty()) {
-                    for (ProductsController.ProductWrapper productWrapper : currentProcutsToChange) {
+                    for (ProductsController.ProductWrapper productWrapper : currentProductsToChange) {
                         Decimal priceToSet = productWrapper.product.Price__c / currencies[0].ConversionRate;
                         productWrapper.product.Price__c = priceToSet.setScale(0);
                     }
@@ -53,14 +58,14 @@ public class ProductsService {
 
                 if (!currencies.isEmpty()) {
                     for (CurrencyType currencyType : currencies) {
-                        if (currencyType.isoCode == newIsoCode) {
+                        if (currencyType.IsoCode == newIsoCode) {
                             newCurrency = currencyType;
-                        } else if (currencyType.isoCode == oldIsoCode) {
+                        } else if (currencyType.IsoCode == oldIsoCode) {
                             oldCurrency = currencyType;
                         }
                     }
                 
-                    for (ProductsController.ProductWrapper productWrapper : currentProcutsToChange) {
+                    for (ProductsController.ProductWrapper productWrapper : currentProductsToChange) {
                         Decimal corporatePrice = productWrapper.product.Price__c * oldCurrency.ConversionRate;
                         Decimal priceToSet = corporatePrice / newCurrency.ConversionRate;
                         productWrapper.product.Price__c = priceToSet.setScale(0);
@@ -68,7 +73,7 @@ public class ProductsService {
                 }
             }        
         }
-        return currentProcutsToChange;
+        return currentProductsToChange;
     }
 
     public static List<ProductsController.ProductWrapper> formProductWrappers(List<Product2> products) {
@@ -80,7 +85,7 @@ public class ProductsService {
             productWrapper.product = product;
             if (attachmentsByParentId.containsKey(product.Id)) {
                 productWrapper.attachmentId = (String) attachmentsByParentId.get(product.Id).get('Id');
-                productWrapper.isAttachmentExists = true;                
+                productWrapper.imageNotEmpty = true;
             }
             productWrappers.add(productWrapper);
         }

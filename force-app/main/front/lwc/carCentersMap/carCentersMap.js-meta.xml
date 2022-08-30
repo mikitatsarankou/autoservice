@@ -2,6 +2,9 @@
 <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
     <apiVersion>51.0</apiVersion>
     <description>Car Centers Map</description>
-    <isExposed>false</isExposed>
+    <isExposed>true</isExposed>
     <masterLabel>Car Centers Map</masterLabel>
+    <targets>
+        <target>lightning__AppPage</target>
+    </targets>
 </LightningComponentBundle>
