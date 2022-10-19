@@ -14,8 +14,8 @@ export default class ProductsViewer extends LightningElement {
         MAX_PRODUCTS_TO_SHOW: 3,
         CARD_PX_WIDTH_SIZE: 550,
         BUTTONS_DEFAULT_PX_WIDTH_SIZE: 1650
-
     }
+
     @track currentCurrency = this.CONSTANT.DEFAULT_CURRENCY;
     @track error;
     @track displayProducts = false;
@@ -36,46 +36,58 @@ export default class ProductsViewer extends LightningElement {
 
     isRendered = false;
 
-    connectedCallback() {
-        this.loadDefault();
-    }
-
     renderedCallback() {
+        console.log('renderedCallback');
+
         if (!this.isRendered) {
             this.handleResizeLeftPosition(this.currentProducts.length);
+            this.loadDefault();
         }
         this.isRendered = true;
     }
 
     setProducts(products, isDefaultToLoad) {
+        console.log('setProducts');
+        console.log('products: ', jsonCopy(products));
         this.disableProductsView();
 
         if (isDefaultToLoad) {
             this.setDefaultCurrency();
         }
 
-        for (let key in products) {
-            let imageNotEmpty = products[key].imageNotEmpty;
-            let attachmentLink = imageNotEmpty ? this.CONSTANT.DOMAIN_NAME_FILES + products[key].attachmentId : 'null';
-            let product = products[key].product;
+        try {
+            for (let key in products) {
+                let imageNotEmpty = products[key].imageNotEmpty;
+                let attachmentLink = imageNotEmpty ? this.CONSTANT.DOMAIN_NAME_FILES + products[key].attachmentId : 'null';
+                let product = products[key].product;
 
-            this.recordsList.push({
-                Key: product.Id,
-                Model: product.Car_Model__c.replace('_', ' '),
-                BuildDate: product.Build_Date__c,
-                Color: product.Color__c,
-                CarType: product.Car_Type__c,
-                Price: product.Price__c,
-                Horsepower: product.Horsepower__c,
-                FuelType: product.Fuel_Type__c,
-                EngineCapacity: product.Engine_Capacity__c,
-                isAttachmentsExists: imageNotEmpty,
-                Attachment: attachmentLink
-            });
+                this.recordsList.push({
+                    Key: product.Id,
+                    Model: product.Car_Model__c.replace('_', ' '),
+                    BuildDate: product.Build_Date__c,
+                    Color: product.Color__c,
+                    CarType: product.Car_Type__c,
+                    Price: product.Price__c,
+                    Horsepower: product.Horsepower__c,
+                    FuelType: product.Fuel_Type__c,
+                    EngineCapacity: product.Engine_Capacity__c,
+                    isAttachmentsExists: imageNotEmpty,
+                    Attachment: attachmentLink
+                });
+
+                this.handleResizeButtons(this.recordsList.length);
+
+            }
+        } catch (error) {
+            this.error = error;
+            console.log(error);
         }
 
         this.handleResizeButtons(this.recordsList.length);
         this.enableProductsView();
+
+        console.log('this.recordsList.length: ', this.recordsList.length);
+        console.log('this.displayProducts: ', this.displayProducts);
     }
 
     disableProductsView() {
@@ -188,8 +200,12 @@ export default class ProductsViewer extends LightningElement {
     }
 
     async loadDefault(event) {
-        this.getDefaultProducts();
-        await delay(1000);
+        console.log('this.defaultProducts.length', this.defaultProducts.length);
+        if (this.defaultProducts.length === 0) {
+            this.getDefaultProducts();
+            await delay(1500);
+        }
+        console.log('this.defaultProducts.length', this.defaultProducts.length);
         this.setProducts(this.defaultProducts, true);
     }
 
@@ -214,7 +230,7 @@ export default class ProductsViewer extends LightningElement {
             positionToSet = this.currentLeftPosition + this.CONSTANT.CARD_PX_WIDTH_SIZE;
         }
         this.currentLeftPosition = positionToSet;
-        sliderContentDiv.style.left = positionToSet + 'px';
+        //sliderContentDiv.style.left = positionToSet + 'px';
     }
 
     handleResizeButtons(currentProductsLength) {
@@ -228,7 +244,7 @@ export default class ProductsViewer extends LightningElement {
             widthToSet = this.CONSTANT.BUTTONS_DEFAULT_PX_WIDTH_SIZE;
         }
         this.currentButtonsWidth = widthToSet;
-        buttonsDiv.style.width = widthToSet + 'px';
+        //buttonsDiv.style.width = widthToSet + 'px';
     }
 
     handleResizeLeftPosition(currentProductsLength) {
@@ -237,7 +253,7 @@ export default class ProductsViewer extends LightningElement {
             let positionToSet = 0;
             positionToSet = this.currentLeftPosition + (this.CONSTANT.CARD_PX_WIDTH_SIZE / 2);
             this.currentLeftPosition = positionToSet;
-            sliderContentDiv.style.left = this.currentLeftPosition + 'px';
+            //sliderContentDiv.style.left = this.currentLeftPosition + 'px';
         }
     }
 }

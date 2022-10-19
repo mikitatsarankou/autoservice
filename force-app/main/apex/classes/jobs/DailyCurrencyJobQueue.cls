@@ -9,14 +9,22 @@ public class DailyCurrencyJobQueue implements Queueable, Database.AllowsCallouts
     public void execute(QueueableContext QC) {
         Http http = new Http();
         HttpRequest request = new HttpRequest();
-        system.debug('requestURI: ' + requestURI);
         request.setEndpoint(requestURI);
         request.setMethod('GET');
-        HttpResponse responseJSON = http.send(request);
+        HttpResponse responseJSON;
+        try {
+            responseJSON = http.send(request);
+        } catch (Exception ex) {
+            Internal_Message__c internalMessage = new Internal_Message__c(
+                    Name = 'currency update error',
+                    Error_message__c = 'failed to get currency \n' + ex.getCause() + '\n' + ex.getStackTraceString()
+            );
+            insert internalMessage;
+        }
 
         Boolean isDataCorrect = false;
 
-        if (responseJSON.getStatusCode() == 200) {
+        if (responseJSON != null && responseJSON.getStatusCode() == 200) {
             String response = responseJSON.getBody().replace('"currency":', '"currencyName":');
             CurrencyController.CurrencyWrapper currencyWrapper = (CurrencyController.CurrencyWrapper) System.JSON.deserialize(response, CurrencyController.CurrencyWrapper.class);
             
