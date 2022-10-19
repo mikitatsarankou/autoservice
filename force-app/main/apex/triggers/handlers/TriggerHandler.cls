@@ -19,9 +19,6 @@ public virtual class TriggerHandler {
     public TriggerHandler() {
     }
 
-    /***************************************
-     * public methods
-     ***************************************/
     public String ObjectName;
 
     // main method that will be called during execution
