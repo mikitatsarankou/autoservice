@@ -17,6 +17,14 @@
         <name>AuraDefinitionBundle</name>
     </types>
     <types>
+        <members>dealership guest user Profile</members>
+        <name>Profile</name>
+    </types>
+    <types>
+        <members>dealership</members>
+        <name>CustomSite</name>
+    </types>
+    <types>
         <members>*</members>
         <name>CustomLabel</name>
     </types>

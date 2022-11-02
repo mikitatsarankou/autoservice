@@ -1,0 +1,13 @@
+<apex:page standardStylesheets="true" showHeader="false">
+    <apex:includeLightning />
+
+    <div id="dealershipPage"></div>
+
+    <script>
+        $Lightning.use("c:dealershipPage", function () {
+            $Lightning.createComponent("c:pageDisplayer", {}, "dealershipPage", function (component) {
+                /*console.log('pageDisplayerId created')*/
+            })
+        });
+    </script>
+</apex:page>
