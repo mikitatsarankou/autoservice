@@ -1,4 +1,4 @@
-public class ProductsService {
+public without sharing class ProductsService {
 
     private static final String PRESENTABLE_PHOTO_DESCRIPTION = 'presentable photo';
     private static final String CORPORATE_CURRENCY = 'PLN';

@@ -1,4 +1,4 @@
-public class ProductsController {
+public without sharing class ProductsController {
 
     @AuraEnabled(Cacheable = true)
     public static List<ProductWrapper> getProducts() {

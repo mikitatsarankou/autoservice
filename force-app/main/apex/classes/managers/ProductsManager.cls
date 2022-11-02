@@ -1,4 +1,4 @@
-public class ProductsManager {
+public without sharing class ProductsManager {
     private static final String AUDI = 'Audi';
 
     public static List<Product2> getProducts() {
