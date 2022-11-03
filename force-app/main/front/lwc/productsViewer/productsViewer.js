@@ -9,7 +9,7 @@ import {jsonCopy, isEmpty, delay} from 'c/helper';
 export default class ProductsViewer extends LightningElement {
 
     CONSTANT = {
-        DOMAIN_NAME_FILES: 'https://tsarankou-dev-ed--c.documentforce.com/servlet/servlet.FileDownload?file=',
+        DEFAULT_AUDI_LOGO: 'https://tsarankou-dev-ed.my.salesforce.com/sfc/dist/version/download/?oid=00D2w00000BKw6b&ids=0682w00000M1zDpAAJ&d=/a/2w000000QAhf/KH1DI0I_W4KGqhAxFRfhJZAPMQZHKvTzXcm1T_3SiAs&operationContext=DELIVERY&viewId=05H2w000002DpJmEAK&dpt=',
         DEFAULT_CURRENCY: 'USD',
         MAX_PRODUCTS_TO_SHOW: 3,
         CARD_PX_WIDTH_SIZE: 550,
@@ -58,7 +58,7 @@ export default class ProductsViewer extends LightningElement {
         try {
             for (let key in products) {
                 let imageNotEmpty = products[key].imageNotEmpty;
-                let attachmentLink = imageNotEmpty ? this.CONSTANT.DOMAIN_NAME_FILES + products[key].attachmentId : 'null';
+                let attachmentLink = imageNotEmpty ? products[key].contentDownloadUrl : this.CONSTANT.DEFAULT_AUDI_LOGO;
                 let product = products[key].product;
 
                 this.recordsList.push({

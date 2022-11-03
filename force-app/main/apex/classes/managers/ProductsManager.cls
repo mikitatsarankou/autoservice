@@ -1,13 +1,26 @@
-public class ProductsManager {
+public without sharing class ProductsManager {
     private static final String AUDI = 'Audi';
+
+    private static final Set<String> GENERAL_FIELDS_TO_QUERY = new Set<String>{
+            'Id',
+            'Car_Model__c',
+            'Build_Date__c',
+            'Price__c',
+            'Color__c',
+            'Horsepower__c',
+            'Engine_Capacity__c',
+            'Fuel_Type__c',
+            'Car_Center__C',
+            'Content_Download_Url__c'
+    };
 
     public static List<Product2> getProducts() {
         return [
                 SELECT Id, Car_Model__c, Build_Date__c,
                         Price__c, Car_Type__c, Color__c, Horsepower__c,
-                        Engine_Capacity__c, Fuel_Type__c
+                        Engine_Capacity__c, Fuel_Type__c, Content_Download_Url__c
                 FROM Product2
-                WHERE Name LIKE: AUDI + '%'
+                WHERE Name LIKE :AUDI + '%'
         ];
     }
 
@@ -15,10 +28,10 @@ public class ProductsManager {
         return [
                 SELECT Id, Car_Model__c, Build_Date__c,
                         Price__c, Car_Type__c, Color__c, Horsepower__c,
-                        Engine_Capacity__c, Fuel_Type__c, Car_Center__r.City__c
+                        Engine_Capacity__c, Fuel_Type__c, Car_Center__r.City__c, Content_Download_Url__c
                 FROM Product2
-                WHERE Name LIKE: AUDI + '%'
-                AND Car_Center__r.City__c LIKE: city + '%'
+                WHERE Name LIKE :AUDI + '%'
+                AND Car_Center__r.City__c LIKE :city + '%'
         ];
     }
 
@@ -26,10 +39,10 @@ public class ProductsManager {
         return [
                 SELECT Id, Car_Model__c, Build_Date__c,
                         Price__c, Car_Type__c, Color__c, Horsepower__c,
-                        Engine_Capacity__c, Fuel_Type__c, Car_Center__c
+                        Engine_Capacity__c, Fuel_Type__c, Car_Center__c, Content_Download_Url__c
                 FROM Product2
-                WHERE Name LIKE: AUDI + '%'
-                AND Car_Center__c =: carCenterId
+                WHERE Name LIKE :AUDI + '%'
+                AND Car_Center__c = :carCenterId
         ];
     }
 
@@ -37,9 +50,9 @@ public class ProductsManager {
         List<Product2> product2 = [
                 SELECT Id, Car_Model__c, Build_Date__c,
                         Price__c, Car_Type__c, Color__c, Horsepower__c,
-                        Engine_Capacity__c, Fuel_Type__c, Car_Center__c
+                        Engine_Capacity__c, Fuel_Type__c, Car_Center__c, Content_Download_Url__c
                 FROM Product2
-                WHERE Id IN: ids
+                WHERE Id IN :ids
         ];
         if (!product2.isEmpty()) {
             return product2[0];
@@ -51,13 +64,24 @@ public class ProductsManager {
         List<Product2> product2 = [
                 SELECT Id, Car_Model__c, Build_Date__c,
                         Price__c, Car_Type__c, Color__c, Horsepower__c,
-                        Engine_Capacity__c, Fuel_Type__c, Car_Center__c
+                        Engine_Capacity__c, Fuel_Type__c, Car_Center__c, Content_Download_Url__c
                 FROM Product2
-                WHERE Id IN: ids
+                WHERE Id IN :ids
         ];
         if (!product2.isEmpty()) {
             return product2;
         }
         return null;
+    }
+
+    public static List<Product2> getProductsByIds(Set<Id> ids) {
+        return [
+                SELECT Id, Car_Model__c, Build_Date__c,
+                        Price__c, Car_Type__c, Color__c, Horsepower__c,
+                        Engine_Capacity__c, Fuel_Type__c, Car_Center__c,
+                        Content_Download_Url__c
+                FROM Product2
+                WHERE Id IN :ids
+        ];
     }
 }
