@@ -1,5 +1,5 @@
 public without sharing class ProductsManager {
-    private static final String AUDI = 'Audi';
+    private static final String audiSearchKey = '%' + String.escapeSingleQuotes('Audi') + '%';
 
     private static final Set<String> GENERAL_FIELDS_TO_QUERY = new Set<String>{
             'Id',
@@ -14,74 +14,71 @@ public without sharing class ProductsManager {
             'Content_Download_Url__c'
     };
 
+    private static final String FROM_PRODUCT2 = ' FROM Product2';
+    private static final String WHERE_STATEMENT = ' WHERE ';
+    private static final String OR_STATEMENT = ' OR ';
+    private static final String AND_STATEMENT = ' AND ';
+    private static final String LIKE_STATEMENT = ' LIKE ';
+
     public static List<Product2> getProducts() {
-        return [
-                SELECT Id, Car_Model__c, Build_Date__c,
-                        Price__c, Car_Type__c, Color__c, Horsepower__c,
-                        Engine_Capacity__c, Fuel_Type__c, Content_Download_Url__c
-                FROM Product2
-                WHERE Name LIKE :AUDI + '%'
-        ];
+        String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY), ',');
+        String query = 'SELECT ' + fieldsToQuery +
+                FROM_PRODUCT2 +
+                WHERE_STATEMENT + 'Name' + LIKE_STATEMENT + ':audiSearchKey';
+
+        return Database.query(query);
     }
 
     public static List<Product2> getProductsByCity(String city) {
-        return [
-                SELECT Id, Car_Model__c, Build_Date__c,
-                        Price__c, Car_Type__c, Color__c, Horsepower__c,
-                        Engine_Capacity__c, Fuel_Type__c, Car_Center__r.City__c, Content_Download_Url__c
-                FROM Product2
-                WHERE Name LIKE :AUDI + '%'
-                AND Car_Center__r.City__c LIKE :city + '%'
-        ];
+        String citySearchKey = '%' + String.escapeSingleQuotes(city) + '%';
+        String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY), ',');
+        String query = 'SELECT ' + fieldsToQuery +
+                FROM_PRODUCT2 +
+                WHERE_STATEMENT + 'Name' + LIKE_STATEMENT + ':audiSearchKey' +
+                AND_STATEMENT + 'Car_Center__r.City__c' + LIKE_STATEMENT + ':citySearchKey';
+        system.debug(query);
+        return Database.query(query);
     }
 
     public static List<Product2> getProductsByCarCenterId(Id carCenterId) {
-        return [
-                SELECT Id, Car_Model__c, Build_Date__c,
-                        Price__c, Car_Type__c, Color__c, Horsepower__c,
-                        Engine_Capacity__c, Fuel_Type__c, Car_Center__c, Content_Download_Url__c
-                FROM Product2
-                WHERE Name LIKE :AUDI + '%'
-                AND Car_Center__c = :carCenterId
-        ];
+        String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY), ',');
+        String query = 'SELECT ' + fieldsToQuery +
+                FROM_PRODUCT2 +
+                WHERE_STATEMENT + 'Name' + LIKE_STATEMENT + ':audiSearchKey' +
+                AND_STATEMENT + 'Car_Center__c = :carCenterId';
+
+        return Database.query(query);
     }
 
-    public static Product2 getProductById(List<Id> ids) {
-        List<Product2> product2 = [
-                SELECT Id, Car_Model__c, Build_Date__c,
-                        Price__c, Car_Type__c, Color__c, Horsepower__c,
-                        Engine_Capacity__c, Fuel_Type__c, Car_Center__c, Content_Download_Url__c
-                FROM Product2
-                WHERE Id IN :ids
-        ];
-        if (!product2.isEmpty()) {
-            return product2[0];
+    public static Product2 getProductById(List<Id> productsIds) {
+        String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY), ',');
+        String query = 'SELECT ' + fieldsToQuery +
+                FROM_PRODUCT2 +
+                WHERE_STATEMENT + 'Id IN :productsIds';
+
+        List<Product2> products = Database.query(query);
+
+        if (products.isEmpty()) {
+            return new Product2();
         }
-        return null;
+        return products.get(0);
     }
 
-    public static List<Product2> getProductsByIds(List<Id> ids) {
-        List<Product2> product2 = [
-                SELECT Id, Car_Model__c, Build_Date__c,
-                        Price__c, Car_Type__c, Color__c, Horsepower__c,
-                        Engine_Capacity__c, Fuel_Type__c, Car_Center__c, Content_Download_Url__c
-                FROM Product2
-                WHERE Id IN :ids
-        ];
-        if (!product2.isEmpty()) {
-            return product2;
-        }
-        return null;
+    public static List<Product2> getProductsByIds(List<Id> productsIds) {
+        String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY), ',');
+        String query = 'SELECT ' + fieldsToQuery +
+                FROM_PRODUCT2 +
+                WHERE_STATEMENT + 'Id IN :productsIds';
+
+        return Database.query(query);
     }
 
-    public static List<Product2> getProductsByIds(Set<Id> ids) {
-        return [
-                SELECT Id, Car_Model__c, Build_Date__c,
-                        Price__c, Car_Type__c, Color__c, Horsepower__c,
-                        Engine_Capacity__c, Fuel_Type__c, Car_Center__c,
-                        Content_Download_Url__c
-                FROM Product2
-                WHERE Id IN :ids
-        ];
+    public static List<Product2> getProductsByIds(Set<Id> productsIds) {
+        String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY), ',');
+        String query = 'SELECT ' + fieldsToQuery +
+                FROM_PRODUCT2 +
+                WHERE_STATEMENT + 'Id IN :productsIds';
+
+        return Database.query(query);
     }
 }
