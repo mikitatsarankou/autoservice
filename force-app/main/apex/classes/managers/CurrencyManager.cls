@@ -1,7 +1,39 @@
 public class CurrencyManager implements Queueable, Database.AllowsCallouts {
 
-    public final String code;
-    public final String rate;
+    private static final Set<String> GENERAL_FIELDS_TO_QUERY_CURRENCY_TYPE = new Set<String>{
+            'Id',
+            'IsoCode',
+            'IsActive',
+            'IsCorporate',
+            'ConversionRate'
+    };
+
+    private static final Set<String> GENERAL_FIELDS_TO_QUERY_CUSTOM_CURRENCY = new Set<String>{
+            'Id',
+            'Name',
+            'isAcitve__c',
+            'Iso_Code__c',
+            'IsCorporate__c',
+            'CurrencyIsoCode',
+            'Conversion_Rate__c'
+    };
+
+    private static final Set<String> GENERAL_FIELDS_TO_QUERY_BANK_API = new Set<String>{
+            'Id',
+            'Name',
+            'isActive__c',
+            'URI__c'
+    };
+
+    private static final String FROM_CURRENCY_TYPE = ' FROM CurrencyType';
+    private static final String FROM_CUSTOM_CURRENCY = ' FROM Currency__c';
+    private static final String FROM_BANK_API = ' FROM Bank_Api__c';
+    private static final String WHERE_STATEMENT = ' WHERE ';
+    private static final String OR_STATEMENT = ' OR ';
+    private static final String AND_STATEMENT = ' AND ';
+
+    private final String code;
+    private final String rate;
 
     public CurrencyManager(String code, String rate) {
         this.code = code;
@@ -22,42 +54,49 @@ public class CurrencyManager implements Queueable, Database.AllowsCallouts {
     }
 
     public static List<Bank_Api__c> getBanksApis() {
-        return [
-                SELECT Id, Name, isActive__c, URI__c
-                FROM Bank_Api__c
-                WHERE isActive__c = TRUE
-        ];
+        String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY_BANK_API), ',');
+        String query = 'SELECT ' + fieldsToQuery +
+                FROM_BANK_API +
+                WHERE_STATEMENT + 'isActive__c = true';
+
+        return Database.query(query);
     }
 
     public static List<CurrencyType> getCurrencies() {
-        return [
-                SELECT Id, IsoCode, IsActive, IsCorporate, ConversionRate
-                FROM CurrencyType
-                WHERE IsActive = TRUE
-        ];
+        String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY_CURRENCY_TYPE), ',');
+        String query = 'SELECT ' + fieldsToQuery +
+                FROM_CURRENCY_TYPE +
+                WHERE_STATEMENT + 'isActive__c = true';
+
+        return Database.query(query);
     }
 
     public static List<CurrencyType> getCurrenciesByIsoCodes(List<String> isoCodes) {
-        return [
-                SELECT Id, IsoCode, IsActive, ConversionRate
-                FROM CurrencyType
-                WHERE IsActive = TRUE AND IsoCode IN :isoCodes
-        ];
+        String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY_CURRENCY_TYPE), ',');
+        String query = 'SELECT ' + fieldsToQuery +
+                FROM_CURRENCY_TYPE +
+                WHERE_STATEMENT + 'isActive__c = true' +
+                AND_STATEMENT + 'IsoCode IN :isoCodes';
+
+        return Database.query(query);
     }
 
     public static List<Currency__c> getCustomCurrencies() {
-        return [
-                SELECT Id, Conversion_Rate__c, Name, isAcitve__c, IsCorporate__c, Iso_Code__c, CurrencyIsoCode
-                FROM Currency__c
-                WHERE isAcitve__c = TRUE
-        ];
+        String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY_CUSTOM_CURRENCY), ',');
+        String query = 'SELECT ' + fieldsToQuery +
+                FROM_CUSTOM_CURRENCY +
+                WHERE_STATEMENT + 'isAcitve__c = true';
+
+        return Database.query(query);
     }
 
     public static List<Currency__c> getCustomCurrenciesByIsoCodes(List<String> isoCodes) {
-        return [
-                SELECT Id, Conversion_Rate__c, Name, isAcitve__c, IsCorporate__c, Iso_Code__c, CurrencyIsoCode
-                FROM Currency__c
-                WHERE isAcitve__c = TRUE AND Iso_Code__c IN :isoCodes
-        ];
+        String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY_CUSTOM_CURRENCY), ',');
+        String query = 'SELECT ' + fieldsToQuery +
+                FROM_CUSTOM_CURRENCY +
+                WHERE_STATEMENT + 'isAcitve__c = true' +
+                AND_STATEMENT + 'Iso_Code__c IN :isoCodes';
+
+        return Database.query(query);
     }
 }
