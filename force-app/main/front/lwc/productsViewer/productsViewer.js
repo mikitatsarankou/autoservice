@@ -37,7 +37,6 @@ export default class ProductsViewer extends LightningElement {
     isRendered = false;
 
     renderedCallback() {
-        console.log('renderedCallback');
 
         if (!this.isRendered) {
             this.handleResizeLeftPosition(this.currentProducts.length);
@@ -47,8 +46,6 @@ export default class ProductsViewer extends LightningElement {
     }
 
     setProducts(products, isDefaultToLoad) {
-        console.log('setProducts');
-        console.log('products: ', jsonCopy(products));
         this.disableProductsView();
 
         if (isDefaultToLoad) {
@@ -85,9 +82,6 @@ export default class ProductsViewer extends LightningElement {
 
         this.handleResizeButtons(this.recordsList.length);
         this.enableProductsView();
-
-        console.log('this.recordsList.length: ', this.recordsList.length);
-        console.log('this.displayProducts: ', this.displayProducts);
     }
 
     disableProductsView() {
@@ -200,12 +194,10 @@ export default class ProductsViewer extends LightningElement {
     }
 
     async loadDefault(event) {
-        console.log('this.defaultProducts.length', this.defaultProducts.length);
         if (this.defaultProducts.length === 0) {
             this.getDefaultProducts();
             await delay(1500);
         }
-        console.log('this.defaultProducts.length', this.defaultProducts.length);
         this.setProducts(this.defaultProducts, true);
     }
 

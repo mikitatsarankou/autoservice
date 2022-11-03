@@ -16,6 +16,14 @@ public class Utils {
         return result;
     }
 
+    public static Map<String, SObject> mapByStringField(List<SObject> objects, String fieldName) {
+        Map<String, SObject> result = new Map<String, SObject>();
+        for (SObject obj : objects) {
+            result.put((String) obj.get(fieldName), obj);
+        }
+        return result;
+    }
+
     public static Datetime formDatetimeFromStringGTM3(String dateToForm) {
         if (!String.isBlank(dateToForm)) {
             String correctDate = dateToForm.replace('T', ' ').substringBefore('.');

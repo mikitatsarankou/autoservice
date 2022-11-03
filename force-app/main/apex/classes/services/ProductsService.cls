@@ -32,11 +32,11 @@ public without sharing class ProductsService {
                 List<String> isoCodes = new List<String>{
                         oldIsoCode
                 };
-                List<CurrencyType> currencies = CurrencyService.getCurrenciesByIsoCodes(isoCodes);
+                List<Currency__c> customCurrencies = CurrencyService.getCustomCurrenciesByIsoCodes(isoCodes);
 
-                if (!currencies.isEmpty()) {
+                if (!customCurrencies.isEmpty()) {
                     for (ProductsController.ProductWrapper productWrapper : currentProductsToChange) {
-                        Decimal priceToSet = productWrapper.product.Price__c * currencies[0].ConversionRate;
+                        Decimal priceToSet = productWrapper.product.Price__c * customCurrencies[0].Conversion_Rate__c;
                         productWrapper.product.Price__c = priceToSet.setScale(0);
                     }
                 }
@@ -46,11 +46,11 @@ public without sharing class ProductsService {
                 List<String> isoCodes = new List<String>{
                         newIsoCode
                 };
-                List<CurrencyType> currencies = CurrencyService.getCurrenciesByIsoCodes(isoCodes);
+                List<Currency__c> customCurrencies = CurrencyService.getCustomCurrenciesByIsoCodes(isoCodes);
 
-                if (!currencies.isEmpty()) {
+                if (!customCurrencies.isEmpty()) {
                     for (ProductsController.ProductWrapper productWrapper : currentProductsToChange) {
-                        Decimal priceToSet = productWrapper.product.Price__c / currencies[0].ConversionRate;
+                        Decimal priceToSet = productWrapper.product.Price__c / customCurrencies[0].Conversion_Rate__c;
                         productWrapper.product.Price__c = priceToSet.setScale(0);
                     }
                 }
@@ -60,23 +60,23 @@ public without sharing class ProductsService {
                 List<String> isoCodes = new List<String>{
                         newIsoCode, oldIsoCode
                 };
-                List<CurrencyType> currencies = CurrencyService.getCurrenciesByIsoCodes(isoCodes);
+                List<Currency__c> customCurrencies = CurrencyService.getCustomCurrenciesByIsoCodes(isoCodes);
 
-                CurrencyType oldCurrency;
-                CurrencyType newCurrency;
+                Currency__c oldCurrency;
+                Currency__c newCurrency;
 
-                if (!currencies.isEmpty()) {
-                    for (CurrencyType currencyType : currencies) {
-                        if (currencyType.IsoCode == newIsoCode) {
+                if (!customCurrencies.isEmpty()) {
+                    for (Currency__c currencyType : customCurrencies) {
+                        if (currencyType.Iso_Code__c == newIsoCode) {
                             newCurrency = currencyType;
-                        } else if (currencyType.IsoCode == oldIsoCode) {
+                        } else if (currencyType.Iso_Code__c == oldIsoCode) {
                             oldCurrency = currencyType;
                         }
                     }
 
                     for (ProductsController.ProductWrapper productWrapper : currentProductsToChange) {
-                        Decimal corporatePrice = productWrapper.product.Price__c * oldCurrency.ConversionRate;
-                        Decimal priceToSet = corporatePrice / newCurrency.ConversionRate;
+                        Decimal corporatePrice = productWrapper.product.Price__c * oldCurrency.Conversion_Rate__c;
+                        Decimal priceToSet = corporatePrice / newCurrency.Conversion_Rate__c;
                         productWrapper.product.Price__c = priceToSet.setScale(0);
                     }
                 }

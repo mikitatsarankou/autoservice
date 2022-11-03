@@ -1,14 +1,10 @@
 public class CurrencyService {
 
-    public CurrencyService(String requestsURI) {
-
-    }
-
-    public static List<CurrencyController.CurrencyWrapper> formCurrencyWrapper(List<CurrencyType> currencies) {
+    public static List<CurrencyController.CurrencyWrapper> formCurrencyWrapper(List<Currency__c> currencies) {
         List<CurrencyController.CurrencyWrapper> currencyWrappers = new List<CurrencyController.CurrencyWrapper>();
-        for (CurrencyType currencyType : currencies) {
+        for (Currency__c customCurrency : currencies) {
             CurrencyController.CurrencyWrapper currencyWrapper = new CurrencyController.CurrencyWrapper();
-            currencyWrapper.code = currencyType.IsoCode;   
+            currencyWrapper.code = customCurrency.Iso_Code__c;
             currencyWrappers.add(currencyWrapper);
         }
         return currencyWrappers;
@@ -24,5 +20,13 @@ public class CurrencyService {
 
     public static List<CurrencyType> getCurrenciesByIsoCodes(List<String> isoCodes) {
         return CurrencyManager.getCurrenciesByIsoCodes(isoCodes);
+    }
+
+    public static List<Currency__c> getCustomCurrencies() {
+        return CurrencyManager.getCustomCurrencies();
+    }
+
+    public static List<Currency__c> getCustomCurrenciesByIsoCodes(List<String> isoCodes) {
+        return CurrencyManager.getCustomCurrenciesByIsoCodes(isoCodes);
     }
 }
