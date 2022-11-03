@@ -1,24 +1,24 @@
 public without sharing class ProductsController {
 
-    @AuraEnabled(Cacheable = true)
+    @AuraEnabled
     public static List<ProductWrapper> getProducts() {
         List<Product2> products = ProductsService.getProducts();
         return ProductsService.formProductWrappers(products);
     }
 
-    @AuraEnabled(Cacheable = true)
+    @AuraEnabled
     public static List<ProductWrapper> getProductsByCarCenterId(Object carCenterId) {
         List<Product2> products = ProductsService.getProductsByCarCenterId((Id) carCenterId);
         return ProductsService.formProductWrappers(products);
     }
 
-    @AuraEnabled(Cacheable = true)
+    @AuraEnabled
     public static List<ProductWrapper> getProductsByCity(Object city) {
         List<Product2> products = ProductsService.getProductsByCity((String) city);
         return ProductsService.formProductWrappers(products);
     }
 
-    @AuraEnabled(Cacheable = true)
+    @AuraEnabled
     public static List<ProductWrapper> getProductsWithNewCurrencyPrice(String idsJSON, String newIsoCode, String oldIsoCode) {
         List<Id> productsIds = ProductsController.JSON2IdsList(idsJSON);
         List<Product2> products = ProductsService.getProductsByIds(productsIds);
@@ -44,7 +44,7 @@ public without sharing class ProductsController {
         @AuraEnabled
         public Boolean imageNotEmpty;
         @AuraEnabled
-        public String attachmentId;
+        public String contentDownloadUrl;
 
         public ProductWrapper() {
 
