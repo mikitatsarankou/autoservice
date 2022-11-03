@@ -2,7 +2,7 @@ public class CurrencyController {
 
     @AuraEnabled(Cacheable = true)
     public static List<CurrencyWrapper> getCurrencies() {
-        List<CurrencyType> currencies = CurrencyService.getCurrencies();
+        List<Currency__c> currencies = CurrencyService.getCustomCurrencies();
         return CurrencyService.formCurrencyWrapper(currencies);
     }
 

@@ -66,7 +66,7 @@ export default class ProductsCustomizationSection extends LightningElement {
 
     async loadCurrencyOptions() {
         this.getCurrencies();
-        await delay(500);
+        await delay(2000);
         this.setCurrencyOptions(this.currencyOptionsFromDB);
     }
 

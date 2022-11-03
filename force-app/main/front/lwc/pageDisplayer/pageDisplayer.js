@@ -9,11 +9,9 @@ export default class PageDisplayer extends LightningElement {
 
     constructor() {
         super();
-        console.log('constructor');
     }
 
     connectedCallback() {
-        console.log('connectedCallback');
         isForeignLanguage({})
             .then(isForeign => {
                 this.useDefaultLanguage = !isForeign;
