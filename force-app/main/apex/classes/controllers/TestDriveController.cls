@@ -17,6 +17,16 @@ public with sharing class TestDriveController {
 
     @AuraEnabled(Cacheable = true)
     public static Boolean isDateAlreadyBooked(String selectedProductId, String selectedDate) {
-        return TestDriveService.isDateAlreadyBooked(selectedProductId, selectedDate);
+        Boolean result = false;
+        try {
+            result = TestDriveService.isDateAlreadyBooked(selectedProductId, selectedDate);
+        } catch (Exception caughtException) {
+            new InternalMessageService(
+                    'TestDriveController.isDateAlreadyBooked',
+                    'failed to get bookings',
+                    caughtException
+            ).createNewInternalMessage();
+        }
+        return result;
     }
 }

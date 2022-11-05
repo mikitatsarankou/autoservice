@@ -39,7 +39,7 @@ public class LeadManager {
         return lead;
     }
 
-    public static Lead getLeadByEmailOrPhone(String email, String phone) {
+    public static List<Lead> getLeadByEmailOrPhone(String email, String phone) {
         String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY), ',');
         String query = 'SELECT ' + fieldsToQuery +
                 FROM_LEAD +

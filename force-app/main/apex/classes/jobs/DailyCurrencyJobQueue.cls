@@ -14,12 +14,12 @@ public class DailyCurrencyJobQueue implements Queueable, Database.AllowsCallouts
         HttpResponse responseJSON;
         try {
             responseJSON = http.send(request);
-        } catch (Exception ex) {
-            Internal_Message__c internalMessage = new Internal_Message__c(
-                    Name = 'currency update error',
-                    Error_message__c = 'failed to get currency \n' + ex.getCause() + '\n' + ex.getStackTraceString()
-            );
-            insert internalMessage;
+        } catch (Exception caughtException) {
+            new InternalMessageService(
+                    'DailyCurrencyJobQueue.execute',
+                    'failed to get currency from API',
+                    caughtException
+            ).createNewInternalMessage();
         }
 
         Boolean isDataCorrect = false;

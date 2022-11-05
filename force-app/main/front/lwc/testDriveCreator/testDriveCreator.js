@@ -7,6 +7,8 @@ import getDealershipsWithProducts from '@salesforce/apex/CarCentersController.ge
 import checkSelectedDate from '@salesforce/apex/TestDriveController.isDateAlreadyBooked';
 import createTestDrive from '@salesforce/apex/ClientController.processTestDriveForClient';
 
+import {jsonCopy, isEmpty, delay} from 'c/helper';
+
 export default class TestDriveCreator extends LightningElement {
 
     maxLengthName = 20;
@@ -23,30 +25,32 @@ export default class TestDriveCreator extends LightningElement {
                 value: 'ru'
             }];
 
-    @track displayTestDrive = true;
-    @track displayDateBookedMessage = false;
-    @track displayErrorMessage = false;
-    @track displayWarningMessage = false;
-    @track displaySuccessMessage = false;
+    displayTestDrive = true;
+    displayDateBookedMessage = false;
+    displayErrorMessage = false;
+    displayWarningMessage = false;
+    displaySuccessMessage = false;
 
-    @track isFormHasError = true;
-    @track today;
-    @track minDate;
-    @track maxDate;
-    @track dealerships = [];
-    @track dealershipsOptionsToPush = [];
-    @track dealershipsOptions = [];
-    @track carsOptionsToPush = [];
-    @track carsOptions = [];
+    isFormHasError = true;
+    today;
+    minDate;
+    maxDate;
+    dealerships = [];
+    dealershipsOptionsToPush = [];
+    dealershipsOptions = [];
+    carsOptionsToPush = [];
+    carsOptions = [];
 
-    @track selectedProductId;
-    @track selectedDealershipId;
-    @track selectedDate;
-    @track name;
-    @track surname;
-    @track email;
-    @track language;
-    @track phone;
+    selectedProductId;
+    selectedDealershipId;
+    selectedDate;
+    name;
+    surname;
+    email;
+    language;
+    phone;
+
+    _testDriveFormWrapper;
 
     connectedCallback() {
         getDealershipsWithProducts({})
@@ -139,22 +143,11 @@ export default class TestDriveCreator extends LightningElement {
 
     handleSendButton(event) {
         if (this.isInputsCorrect(event)) {
-            console.log(this.selectedDate);
             checkSelectedDate({selectedProductId: this.selectedProductId, selectedDate: this.selectedDate})
                 .then(isBooked => {
                     if (isBooked === false) {
-                        createTestDrive({name: this.name, surname: this.surname, email: this.email, phone: this.phone, selectedProductId: this.selectedProductId,
-                            selectedDealershipId: this.selectedDealershipId, selectedDate: this.selectedDate})
-                            .then(result => {
-                                if (result === false) {
-                                    this.displayWarningMessage = true;
-                                } else {
-                                    this.displaySuccessMessage = true;
-                                }
-                            })
-                            .catch(error => {
-                                console.log(error);
-                            })
+                        this.processData();
+                        this.sendData();
                     } else {
                         this.displayDateBookedMessage = true;
                     }
@@ -166,6 +159,35 @@ export default class TestDriveCreator extends LightningElement {
             this.displayErrorMessage = true;
         }
     }
+
+    processData() {
+        this._testDriveFormWrapper = {
+            name: this.name,
+            surname: this.surname,
+            email: this.email,
+            phone: this.phone,
+            selectedProductId: this.selectedProductId,
+            selectedDealershipId: this.selectedDealershipId,
+            selectedDate: this.selectedDate
+        }
+    }
+
+    sendData() {
+        console.log(jsonCopy(this._testDriveFormWrapper));
+        createTestDrive({
+            testDriveFormWrapper: this._testDriveFormWrapper
+        }).then(savedSuccessfully => {
+            if (savedSuccessfully === false) {
+                this.displayWarningMessage = true;
+            } else {
+                this.displaySuccessMessage = true
+            }
+        }).catch(error => {
+            this.displayWarningMessage = true;
+            console.log(error)
+        });
+    }
+
 
     closeToast(event) {
         this.displayDateBookedMessage = false;

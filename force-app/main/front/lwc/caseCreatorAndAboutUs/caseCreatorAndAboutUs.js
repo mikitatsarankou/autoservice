@@ -3,6 +3,8 @@ import {LightningElement, track} from 'lwc';
 import getDealershipLocations from '@salesforce/apex/CarCentersController.getResultList';
 import createCase from '@salesforce/apex/ClientController.processCaseForClient';
 
+import {jsonCopy, isEmpty, delay} from 'c/helper';
+
 export default class CaseCreatorAndAboutUs extends LightningElement {
 
     maxLengthName = 20;
@@ -11,9 +13,9 @@ export default class CaseCreatorAndAboutUs extends LightningElement {
     maxLengthSubject = 50;
     maxLengthMessage = 255;
 
-    @track dealershipsOptionsToPush = [];
-    @track dealershipsOptions = [];
-    @track languageOptions =
+    dealershipsOptionsToPush = [];
+    dealershipsOptions = [];
+    languageOptions =
         [{
             label: 'English',
             value: 'en'
@@ -23,19 +25,21 @@ export default class CaseCreatorAndAboutUs extends LightningElement {
             value: 'ru'
          }];
 
-    @track displayCaseCreator = true;
-    @track displayErrorMessage = false;
-    @track displayWarningMessage = false;
-    @track displaySuccessMessage = false;
+    displayCaseCreator = true;
+    displayErrorMessage = false;
+    displayWarningMessage = false;
+    displaySuccessMessage = false;
 
-    @track name;
-    @track surname;
-    @track phone;
-    @track email;
-    @track language;
-    @track selectedDealershipId;
-    @track subject;
-    @track message;
+    name;
+    surname;
+    phone;
+    email;
+    language;
+    selectedDealershipId;
+    subject;
+    message;
+
+    _caseFormWrapper;
 
     connectedCallback() {
         getDealershipLocations({})
@@ -64,23 +68,39 @@ export default class CaseCreatorAndAboutUs extends LightningElement {
 
     handleSendButton(event) {
         if (this.isInputsCorrect(event)) {
-            createCase({
-                name: this.name, surname: this.surname, email: this.email, phone: this.phone,
-                selectedDealershipId: this.selectedDealershipId, subject: this.subject, message: this.message
-            })
-                .then(result => {
-                    if (result === false) {
-                        this.displayWarningMessage = true;
-                    } else {
-                        this.displaySuccessMessage = true;
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+            this.processData();
+            this.sendData();
         } else {
             this.displayErrorMessage = true;
         }
+    }
+
+    processData() {
+        this._caseFormWrapper = {
+            name: this.name,
+            surname: this.surname,
+            email: this.email,
+            phone: this.phone,
+            selectedDealershipId: this.selectedDealershipId,
+            subject: this.subject,
+            message: this.message
+        }
+    }
+
+    sendData() {
+        console.log(jsonCopy(this._caseFormWrapper));
+        createCase({
+            caseFormWrapper: this._caseFormWrapper
+        }).then(savedSuccessfully => {
+            if (savedSuccessfully === false) {
+                this.displayWarningMessage = true;
+            } else {
+                this.displaySuccessMessage = true
+            }
+        }).catch(error => {
+            this.displayWarningMessage = true;
+            console.log(error)
+        });
     }
 
     closeToast(event) {

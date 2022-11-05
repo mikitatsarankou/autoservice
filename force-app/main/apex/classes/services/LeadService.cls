@@ -1,6 +1,6 @@
 public class LeadService {
 
-    public static Lead getLeadByEmailOrPhone(String email, String phone) {
+    public static List<Lead> getLeadByEmailOrPhone(String email, String phone) {
         return LeadManager.getLeadByEmailOrPhone(email, phone);
     }
 

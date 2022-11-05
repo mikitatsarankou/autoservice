@@ -26,7 +26,7 @@ public class ContactManager {
         return contactToUpdate;
     }
 
-    public static Contact getContactByEmailOrPhone(String email, String phone) {
+    public static List<Contact> getContactByEmailOrPhone(String email, String phone) {
         String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY), ',');
         String query = 'SELECT ' + fieldsToQuery +
                 FROM_CONTACT +
