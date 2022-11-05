@@ -2,8 +2,19 @@ public class CurrencyController {
 
     @AuraEnabled(Cacheable = true)
     public static List<CurrencyWrapper> getCurrencies() {
-        List<Currency__c> currencies = CurrencyService.getCustomCurrencies();
-        return CurrencyService.formCurrencyWrapper(currencies);
+        List<CurrencyWrapper> currencyWrappers = new List<CurrencyWrapper>();
+        try {
+            List<Currency__c> currencies = CurrencyService.getCustomCurrencies();
+            currencyWrappers = CurrencyService.formCurrencyWrapper(currencies);
+        } catch (Exception caughtException) {
+            new InternalMessageService(
+                    'CurrencyController.getCurrencies',
+                    'failed to get currency',
+                    caughtException
+            ).createNewInternalMessage();
+        }
+
+        return currencyWrappers;
     }
 
     public class CurrencyWrapper {        
@@ -44,9 +55,4 @@ public class CurrencyController {
     //      "mid":4.2935
     //   }
     // ]
-    
-
-    public CurrencyController() {
-
-    }
 }

@@ -2,28 +2,68 @@ public without sharing class ProductsController {
 
     @AuraEnabled
     public static List<ProductWrapper> getProducts() {
-        List<Product2> products = ProductsService.getProducts();
-        return ProductsService.formProductWrappers(products);
+        List<ProductWrapper> productWrappers = new List<ProductWrapper>();
+        try {
+            List<Product2> products = ProductsService.getProducts();
+            productWrappers = ProductsService.formProductWrappers(products);
+        } catch (Exception caughtException) {
+            new InternalMessageService(
+                    'ProductsController.getProducts',
+                    'failed to get products from db',
+                    caughtException
+            ).createNewInternalMessage();
+        }
+        return productWrappers;
     }
 
     @AuraEnabled
     public static List<ProductWrapper> getProductsByCarCenterId(Object carCenterId) {
-        List<Product2> products = ProductsService.getProductsByCarCenterId((Id) carCenterId);
-        return ProductsService.formProductWrappers(products);
+        List<ProductWrapper> productWrappers = new List<ProductWrapper>();
+        try {
+            List<Product2> products = ProductsService.getProductsByCarCenterId((Id) carCenterId);
+            productWrappers = ProductsService.formProductWrappers(products);
+        } catch (Exception caughtException) {
+            new InternalMessageService(
+                    'ProductsController.getProductsByCarCenterId',
+                    'failed to get products from db',
+                    caughtException
+            ).createNewInternalMessage();
+        }
+        return productWrappers;
     }
 
     @AuraEnabled
     public static List<ProductWrapper> getProductsByCity(Object city) {
-        List<Product2> products = ProductsService.getProductsByCity((String) city);
-        return ProductsService.formProductWrappers(products);
+        List<ProductWrapper> productWrappers = new List<ProductWrapper>();
+        try {
+            List<Product2> products = ProductsService.getProductsByCity((String) city);
+            productWrappers = ProductsService.formProductWrappers(products);
+        } catch (Exception caughtException) {
+            new InternalMessageService(
+                    'ProductsController.getProductsByCity',
+                    'failed to get products from db',
+                    caughtException
+            ).createNewInternalMessage();
+        }
+        return productWrappers;
     }
 
     @AuraEnabled
     public static List<ProductWrapper> getProductsWithNewCurrencyPrice(String idsJSON, String newIsoCode, String oldIsoCode) {
-        List<Id> productsIds = ProductsController.JSON2IdsList(idsJSON);
-        List<Product2> products = ProductsService.getProductsByIds(productsIds);
-        List<ProductWrapper> productWrappers = ProductsService.formProductWrappers(products);
-        return ProductsService.getProductsWithNewCurrencyPrice(productWrappers, newIsoCode, oldIsoCode);
+        List<ProductWrapper> productWrappers = new List<ProductWrapper>();
+        try {
+            List<Id> productsIds = ProductsController.JSON2IdsList(idsJSON);
+            List<Product2> products = ProductsService.getProductsByIds(productsIds);
+            List<ProductWrapper> productWrappersToProcess = ProductsService.formProductWrappers(products);
+            return ProductsService.getProductsWithNewCurrencyPrice(productWrappersToProcess, newIsoCode, oldIsoCode);
+        } catch (Exception caughtException) {
+            new InternalMessageService(
+                    'ProductsController.getProductsWithNewCurrencyPrice',
+                    'failed to get products from db',
+                    caughtException
+            ).createNewInternalMessage();
+        }
+        return productWrappers;
     }
 
     public static List<ProductWrapper> JSON2ProductWrapperList(String json) {
