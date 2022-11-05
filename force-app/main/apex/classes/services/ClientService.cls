@@ -1,59 +1,201 @@
-public class ClientService {
-    private static final Integer GMT = 3;
-
-    public static Boolean processTestDriveForClient(String name, String surname, String email,
-            String phone, String selectedProductId, String selectedDealearshipId, String selectedDate) {
+public without sharing class ClientService {
+    public static Boolean processTestDriveForClient(TestDriveFormWrapper testDriveFormWrapper) {
         try {
-            Datetime testDriveDate = Utils.formDatetimeFromStringGTM3(selectedDate);
-            Contact contact = ContactService.getContactByEmailOrPhone(email, phone);
-            if (contact != null) {
-                Contact updatedContact = ContactManager.updateContactInfo(contact);
-                Test_Drive__c testDrive = TestDriveService.createAndLinkTestDriveToExistingContact(updatedContact, selectedDealearshipId, selectedProductId, testDriveDate);
-                Opportunity opportunity = OpportunityService.createAndLinkOpportunityToExistingContact(updatedContact, selectedDealearshipId, selectedProductId, testDriveDate);
+            Datetime testDriveDate = Utils.formDatetimeFromStringGTM3(testDriveFormWrapper.selectedDate);
+            if (planTestDriveForExistingContact(testDriveFormWrapper, testDriveDate)) {
                 return true;
             }
-            Lead lead = LeadService.getLeadByEmailOrPhone(email, phone);
-            if (lead != null) {
-                Lead updatedLead = LeadManager.updateLeadInfo(lead);
-                Test_Drive__c testDrive = TestDriveService.createAndLinkTestDriveToExistingLead(updatedLead, selectedDealearshipId, selectedProductId, testDriveDate);
-                Opportunity opportunity = OpportunityService.createAndLinkOpportunityToExistingLead(updatedLead, selectedDealearshipId, selectedProductId, testDriveDate);
+            if (planTestDriveForExistingLead(testDriveFormWrapper, testDriveDate)) {
                 return true;
             }
-            Lead newLead = LeadService.newLead(name, surname, email, phone);
-            Test_Drive__c testDrive = TestDriveService.createAndLinkTestDriveToExistingLead(newLead, selectedDealearshipId, selectedProductId, testDriveDate);
-            Opportunity opportunity = OpportunityService.createAndLinkOpportunityToExistingLead(newLead, selectedDealearshipId, selectedProductId, testDriveDate);
-            return true;
+            return planTestDriveForNewLead(testDriveFormWrapper, testDriveDate);
         } catch (Exception ex) {
-            system.debug(ex.getStackTraceString());
-            system.debug(ex.getMessage());
             return false;
         }
     }
 
-    public static Boolean processCaseForClient(String name, String surname, String email,
-            String phone, String selectedDealershipId, String subject, String message) {
+    public static Boolean processCaseForClient(CaseFormWrapper caseFormWrapper) {
         try {
-            Contact contact = ContactService.getContactByEmailOrPhone(email, phone);
-            if (contact != null) {
-                Contact updatedContact = ContactManager.updateContactInfo(contact);
-                Case casee = CaseManager.newCaseForExistingContact(updatedContact, email, subject, message, selectedDealershipId);
+            if (createCaseForExistingContact(caseFormWrapper)) {
                 return true;
             }
-            Lead lead = LeadService.getLeadByEmailOrPhone(email, phone);
-            if (lead != null) {
-                Lead updatedLead = LeadManager.updateLeadInfo(lead);
-                Case casee = CaseManager.newCaseForExistingLead(updatedLead, email, subject, message, selectedDealershipId);
+            if (createCaseForExistingLead(caseFormWrapper)) {
                 return true;
             }
-            Lead newLead = LeadService.newLead(name, surname, email, phone);
-            CaseManager.newCaseForExistingLead(newLead, email, subject, message, selectedDealershipId);
-            return true;
-
+            return createCaseForNotExistingLead(caseFormWrapper);
         } catch (Exception ex) {
-            system.debug(ex.getStackTraceString());
-            system.debug(ex.getMessage());
             return false;
         }
+    }
+
+    private static Boolean planTestDriveForNewLead(TestDriveFormWrapper testDriveFormWrapper, Datetime testDriveDate) {
+        Lead newLead = LeadService.newLead(
+                testDriveFormWrapper.name,
+                testDriveFormWrapper.surname,
+                testDriveFormWrapper.email,
+                testDriveFormWrapper.phone
+        );
+
+        TestDriveService.createAndLinkTestDriveToExistingLead(
+                newLead,
+                testDriveFormWrapper.selectedDealershipId,
+                testDriveFormWrapper.selectedProductId,
+                testDriveDate
+        );
+
+        OpportunityService.createAndLinkOpportunityToExistingLead(
+                newLead,
+                testDriveFormWrapper.selectedDealershipId,
+                testDriveFormWrapper.selectedProductId,
+                testDriveDate
+        );
+
+        return true;
+    }
+    private static Boolean planTestDriveForExistingLead(TestDriveFormWrapper testDriveFormWrapper, Datetime testDriveDate) {
+        List<Lead> leads = LeadService.getLeadByEmailOrPhone(testDriveFormWrapper.email, testDriveFormWrapper.phone);
+
+        if (leads.isEmpty()) {
+            return false;
+        }
+
+        Lead leadToUpdate = leads.get(0);
+        Lead updatedLead = LeadManager.updateLeadInfo(leadToUpdate);
+        TestDriveService.createAndLinkTestDriveToExistingLead(
+                updatedLead,
+                testDriveFormWrapper.selectedDealershipId,
+                testDriveFormWrapper.selectedProductId,
+                testDriveDate
+        );
+
+        OpportunityService.createAndLinkOpportunityToExistingLead(
+                updatedLead,
+                testDriveFormWrapper.selectedDealershipId,
+                testDriveFormWrapper.selectedProductId,
+                testDriveDate
+        );
+
+        return true;
+    }
+    private static Boolean planTestDriveForExistingContact(TestDriveFormWrapper testDriveFormWrapper, Datetime testDriveDate) {
+        List<Contact> contacts = ContactService.getContactByEmailOrPhone(testDriveFormWrapper.email, testDriveFormWrapper.phone);
+
+        if (contacts.isEmpty()) {
+            return false;
+        }
+
+        Contact contactToUpdate = contacts.get(0);
+        Contact updatedContact = ContactManager.updateContactInfo(contactToUpdate);
+        TestDriveService.createAndLinkTestDriveToExistingContact(
+                updatedContact,
+                testDriveFormWrapper.selectedDealershipId,
+                testDriveFormWrapper.selectedProductId,
+                testDriveDate
+        );
+
+        OpportunityService.createAndLinkOpportunityToExistingContact(
+                updatedContact,
+                testDriveFormWrapper.selectedDealershipId,
+                testDriveFormWrapper.selectedProductId,
+                testDriveDate
+        );
+
+        return true;
+    }
+
+    private static Boolean createCaseForExistingContact(CaseFormWrapper caseFormWrapper) {
+        List<Contact> contacts = ContactService.getContactByEmailOrPhone(
+                caseFormWrapper.email,
+                caseFormWrapper.phone
+        );
+
+        if (contacts.isEmpty()) {
+            return false;
+        }
+
+        Contact contactToUpdate = contacts.get(0);
+        Contact updatedContact = ContactManager.updateContactInfo(contactToUpdate);
+        CaseManager.newCaseForExistingContact(
+                updatedContact,
+                caseFormWrapper.email,
+                caseFormWrapper.subject,
+                caseFormWrapper.message,
+                caseFormWrapper.selectedDealershipId
+        );
+
+        return true;
+    }
+
+    private static Boolean createCaseForExistingLead(CaseFormWrapper caseFormWrapper) {
+        List<Lead> leads = LeadService.getLeadByEmailOrPhone(
+                caseFormWrapper.email,
+                caseFormWrapper.phone
+        );
+
+        if (leads.isEmpty()) {
+            return false;
+        }
+        Lead leadToUpdate = leads.get(0);
+        Lead updatedLead = LeadManager.updateLeadInfo(leadToUpdate);
+        CaseManager.newCaseForExistingLead(
+                updatedLead,
+                caseFormWrapper.email,
+                caseFormWrapper.subject,
+                caseFormWrapper.message,
+                caseFormWrapper.selectedDealershipId
+        );
+        return true;
+    }
+
+    private static Boolean createCaseForNotExistingLead(CaseFormWrapper caseFormWrapper) {
+        Lead newLead = LeadService.newLead(
+                caseFormWrapper.name,
+                caseFormWrapper.surname,
+                caseFormWrapper.email,
+                caseFormWrapper.phone
+        );
+        CaseManager.newCaseForExistingLead(
+                newLead,
+                caseFormWrapper.email,
+                caseFormWrapper.subject,
+                caseFormWrapper.message,
+                caseFormWrapper.selectedDealershipId
+        );
+        return true;
+    }
+
+    public class CaseFormWrapper {
+        @AuraEnabled
+        public String name { get; set; }
+        @AuraEnabled
+        public String surname { get; set; }
+        @AuraEnabled
+        public String email { get; set; }
+        @AuraEnabled
+        public String phone { get; set; }
+        @AuraEnabled
+        public String selectedDealershipId { get; set; }
+        @AuraEnabled
+        public String subject { get; set; }
+        @AuraEnabled
+        public String message { get; set; }
+    }
+
+    public class TestDriveFormWrapper {
+        @AuraEnabled
+        public String name { get; set; }
+        @AuraEnabled
+        public String surname { get; set; }
+        @AuraEnabled
+        public String email { get; set; }
+        @AuraEnabled
+        public String phone { get; set; }
+        @AuraEnabled
+        public String selectedDealershipId { get; set; }
+        @AuraEnabled
+        public String selectedProductId { get; set; }
+        @AuraEnabled
+        public String selectedDate { get; set; }
     }
 
 }

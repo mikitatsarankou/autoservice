@@ -66,7 +66,7 @@ public class CurrencyManager implements Queueable, Database.AllowsCallouts {
         String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY_CURRENCY_TYPE), ',');
         String query = 'SELECT ' + fieldsToQuery +
                 FROM_CURRENCY_TYPE +
-                WHERE_STATEMENT + 'isActive__c = true';
+                WHERE_STATEMENT + 'IsActive = true';
 
         return Database.query(query);
     }
@@ -75,7 +75,7 @@ public class CurrencyManager implements Queueable, Database.AllowsCallouts {
         String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY_CURRENCY_TYPE), ',');
         String query = 'SELECT ' + fieldsToQuery +
                 FROM_CURRENCY_TYPE +
-                WHERE_STATEMENT + 'isActive__c = true' +
+                WHERE_STATEMENT + 'IsActive = true' +
                 AND_STATEMENT + 'IsoCode IN :isoCodes';
 
         return Database.query(query);

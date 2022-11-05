@@ -1,14 +1,12 @@
-public class ClientController {
+public without sharing class ClientController {
 
     @AuraEnabled
-    public static Boolean processTestDriveForClient(String name, String surname, String email,
-            String phone, String selectedProductId, String selectedDealershipId, String selectedDate) {
-        return ClientService.processTestDriveForClient(name, surname, email, phone, selectedProductId, selectedDealershipId, selectedDate);
+    public static Boolean processTestDriveForClient(ClientService.TestDriveFormWrapper testDriveFormWrapper) {
+        return ClientService.processTestDriveForClient(testDriveFormWrapper);
     }
 
     @AuraEnabled
-    public static Boolean processCaseForClient(String name, String surname, String email,
-            String phone, String selectedDealershipId, String subject, String message) {
-        return ClientService.processCaseForClient(name, surname, email, phone, selectedDealershipId, subject, message);
+    public static Boolean processCaseForClient(ClientService.CaseFormWrapper caseFormWrapper) {
+        return ClientService.processCaseForClient(caseFormWrapper);
     }
 }
