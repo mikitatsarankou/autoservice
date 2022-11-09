@@ -23,10 +23,14 @@ public class TestDriveService {
         return TestDriveManager.createAndLinkTestDriveToExistingLead(lead, selectedDealershipId, selectedProductId, selectedDate);
     }
 
-    public static Boolean isDateAlreadyBooked(Id selectedProductId, String selectedDate) {
-        List<Test_Drive__c> testDrives = TestDriveManager.getTestDrivesByProductId(selectedProductId);
-        if (testDrives.isEmpty()) return false;
-        Datetime eventDateTimeStart = Utils.formDatetimeFromStringGTM3(selectedDate).addHours(-3);
+    public static Boolean isDateAlreadyBooked(TestDriveController.TestDriveReservationWrapper testDriveReservationWrapper) {
+        List<Test_Drive__c> testDrives = TestDriveManager.getTestDrivesByProductId(testDriveReservationWrapper.selectedProductId);
+        if (testDrives.isEmpty()) {
+            return false;
+        }
+
+        Datetime eventDateTimeStart = Utils.formDatetimeFromStringGTM(testDriveReservationWrapper.selectedDate);
+
         
         for (Test_Drive__c testDrive : testDrives) {
             if (testDrive.Event_Date_Time_Start__c.isSameDay(eventDateTimeStart)) {

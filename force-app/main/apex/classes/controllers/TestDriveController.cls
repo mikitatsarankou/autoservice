@@ -16,10 +16,10 @@ public with sharing class TestDriveController {
     }
 
     @AuraEnabled(Cacheable = true)
-    public static Boolean isDateAlreadyBooked(String selectedProductId, String selectedDate) {
+    public static Boolean isDateAlreadyBooked(TestDriveReservationWrapper testDriveReservationWrapper) {
         Boolean result = false;
         try {
-            result = TestDriveService.isDateAlreadyBooked(selectedProductId, selectedDate);
+            result = TestDriveService.isDateAlreadyBooked(testDriveReservationWrapper);
         } catch (Exception caughtException) {
             new InternalMessageService(
                     'TestDriveController.isDateAlreadyBooked',
@@ -28,5 +28,16 @@ public with sharing class TestDriveController {
             ).createNewInternalMessage();
         }
         return result;
+    }
+
+    public class TestDriveReservationWrapper {
+        @AuraEnabled
+        public String selectedProductId;
+        @AuraEnabled
+        public String selectedDate;
+
+        public TestDriveReservationWrapper() {
+
+        }
     }
 }

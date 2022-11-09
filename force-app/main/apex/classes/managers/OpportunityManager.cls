@@ -6,9 +6,10 @@ public class OpportunityManager {
     private static final Integer DURATION_OF_OPPORTUNITY_IN_DAYS = 7;
 
     public static Opportunity createAndLinkOpportunityToExistingLead(Lead lead, Product2 product, Id selectedDealershipId, Datetime selectedDate) {
-        String formName = lead.FirstName + ' ' + lead.LastName + ' ' + product.Id + ' ' + selectedDate;
+        String title = formOpportunityTitle(lead.FirstName, lead.LastName, selectedDate, product.Id);
+
         Opportunity opportunity = new Opportunity(
-                Name = formName,
+                Name = title,
                 Lead__c = lead.Id,
                 Car_Center__c = selectedDealershipId,
                 Product__c = product.Id,
@@ -24,9 +25,10 @@ public class OpportunityManager {
     }
 
     public static Opportunity createAndLinkOpportunityToExistingContact(Contact contact, Product2 product, Id selectedDealershipId, Datetime selectedDate) {
-        String formName = contact.FirstName + ' ' + contact.LastName + ' ' + product.Id + ' ' + selectedDate;
+        String title = formOpportunityTitle(contact.FirstName, contact.LastName, selectedDate, product.Id);
+
         Opportunity opportunity = new Opportunity(
-                Name = formName,
+                Name = title,
                 Contact__c = contact.Id,
                 Car_Center__c = selectedDealershipId,
                 Product__c = product.Id,
@@ -39,5 +41,9 @@ public class OpportunityManager {
         insert opportunity;
 
         return opportunity;
+    }
+
+    private static String formOpportunityTitle(String firstName, String lastName, Datetime testDriveDate, String productId) {
+        return firstName + ' ' + lastName + ' ' + testDriveDate.addHours(1) + ' GMT+1 ' + '(' + productId + ')';
     }
 }

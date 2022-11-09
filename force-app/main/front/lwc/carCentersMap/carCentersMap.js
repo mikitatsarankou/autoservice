@@ -9,8 +9,8 @@ export default class CarCentersMap extends LightningElement {
     @track recordsList = [];
     center = {
         location: {
-            Latitude:'53.9006',
-            Longitude:'27.5590'
+            Latitude:'52.3876',
+            Longitude:'18.7625'
         }
     }
     zoomLevel = 6;

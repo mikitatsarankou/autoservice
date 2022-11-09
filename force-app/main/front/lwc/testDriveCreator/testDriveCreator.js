@@ -51,6 +51,7 @@ export default class TestDriveCreator extends LightningElement {
     phone;
 
     _testDriveFormWrapper;
+    _testDriveReservationWrapper;
 
     connectedCallback() {
         getDealershipsWithProducts({})
@@ -143,13 +144,16 @@ export default class TestDriveCreator extends LightningElement {
 
     handleSendButton(event) {
         if (this.isInputsCorrect(event)) {
-            checkSelectedDate({selectedProductId: this.selectedProductId, selectedDate: this.selectedDate})
+            this.processReservationData();
+            checkSelectedDate({testDriveReservationWrapper: this._testDriveReservationWrapper})
                 .then(isBooked => {
                     if (isBooked === false) {
                         this.processData();
                         this.sendData();
                     } else {
                         this.displayDateBookedMessage = true;
+                        delay(5000);
+                        this.displayDateBookedMessage = false;
                     }
                 })
                 .catch(error => {
@@ -157,6 +161,13 @@ export default class TestDriveCreator extends LightningElement {
                 })
         } else {
             this.displayErrorMessage = true;
+        }
+    }
+
+    processReservationData() {
+        this._testDriveReservationWrapper = {
+            selectedProductId: this.selectedProductId,
+            selectedDate: this.selectedDate
         }
     }
 
