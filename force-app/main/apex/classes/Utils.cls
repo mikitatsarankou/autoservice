@@ -24,7 +24,7 @@ public class Utils {
         return result;
     }
 
-    public static Datetime formDatetimeFromStringGTM3(String dateToForm) {
+    public static Datetime formDatetimeFromStringGTM(String dateToForm) {
         if (!String.isBlank(dateToForm)) {
             String correctDate = dateToForm.replace('T', ' ').substringBefore('.');
             return Datetime.valueOf(correctDate).addHours(6);

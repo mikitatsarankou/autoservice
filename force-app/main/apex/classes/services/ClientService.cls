@@ -1,7 +1,7 @@
 public without sharing class ClientService {
     public static Boolean processTestDriveForClient(TestDriveFormWrapper testDriveFormWrapper) {
         try {
-            Datetime testDriveDate = Utils.formDatetimeFromStringGTM3(testDriveFormWrapper.selectedDate);
+            Datetime testDriveDate = Utils.formDatetimeFromStringGTM(testDriveFormWrapper.selectedDate);
             if (planTestDriveForExistingContact(testDriveFormWrapper, testDriveDate)) {
                 return true;
             }
