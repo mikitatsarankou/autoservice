@@ -1,12 +1,16 @@
 public without sharing class ClientController {
 
     @AuraEnabled
-    public static Boolean processTestDriveForClient(ClientService.TestDriveFormWrapper testDriveFormWrapper) {
+    public static Boolean processTestDriveForClient(TestDriveService.TestDriveFormWrapper testDriveFormWrapper) {
         Boolean result = false;
         try {
-            result = ClientService.processTestDriveForClient(testDriveFormWrapper);
+            ClientService.ProcessResultWrapper processResultWrapper = ClientService.processTestDriveForClient(testDriveFormWrapper);
+            if (processResultWrapper.result) {
+                TestDriveService.sendEmailForNewTestDrives(processResultWrapper.recordsIds);
+                result = true;
+            }
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'ClientController.processTestDriveForClient',
                     'failed to processTestDriveForClient',
                     caughtException
@@ -16,12 +20,18 @@ public without sharing class ClientController {
     }
 
     @AuraEnabled
-    public static Boolean processCaseForClient(ClientService.CaseFormWrapper caseFormWrapper) {
+    public static Boolean processCaseForClient(CaseService.CaseFormWrapper caseFormWrapper) {
         Boolean result = false;
         try {
-            result = ClientService.processCaseForClient(caseFormWrapper);
+            system.debug('processCaseForClient');
+            ClientService.ProcessResultWrapper processResultWrapper = ClientService.processCaseForClient(caseFormWrapper);
+            system.debug('processResultWrapper: ' + processResultWrapper);
+            if (processResultWrapper.result) {
+                CaseService.sendEmailForNewCases(processResultWrapper.recordsIds);
+                result = true;
+            }
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'ClientController.processCaseForClient',
                     'failed to processCaseForClient',
                     caughtException

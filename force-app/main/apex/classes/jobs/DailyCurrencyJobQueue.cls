@@ -15,7 +15,7 @@ public class DailyCurrencyJobQueue implements Queueable, Database.AllowsCallouts
         try {
             responseJSON = http.send(request);
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'DailyCurrencyJobQueue.execute',
                     'failed to get currency from API',
                     caughtException

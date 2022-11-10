@@ -7,7 +7,7 @@ public without sharing class ProductsController {
             List<Product2> products = ProductsService.getProducts();
             productWrappers = ProductsService.formProductWrappers(products);
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'ProductsController.getProducts',
                     'failed to get products from db',
                     caughtException
@@ -23,7 +23,7 @@ public without sharing class ProductsController {
             List<Product2> products = ProductsService.getProductsByCarCenterId((Id) carCenterId);
             productWrappers = ProductsService.formProductWrappers(products);
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'ProductsController.getProductsByCarCenterId',
                     'failed to get products from db',
                     caughtException
@@ -39,7 +39,7 @@ public without sharing class ProductsController {
             List<Product2> products = ProductsService.getProductsByCity((String) city);
             productWrappers = ProductsService.formProductWrappers(products);
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'ProductsController.getProductsByCity',
                     'failed to get products from db',
                     caughtException
@@ -57,7 +57,7 @@ public without sharing class ProductsController {
             List<ProductWrapper> productWrappersToProcess = ProductsService.formProductWrappers(products);
             return ProductsService.getProductsWithNewCurrencyPrice(productWrappersToProcess, newIsoCode, oldIsoCode);
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'ProductsController.getProductsWithNewCurrencyPrice',
                     'failed to get products from db',
                     caughtException

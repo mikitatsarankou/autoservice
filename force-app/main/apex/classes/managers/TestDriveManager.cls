@@ -2,6 +2,21 @@ public class TestDriveManager {
 
     private static final Set<String> GENERAL_FIELDS_TO_QUERY_TEST_DRIVE = new Set<String>{
             'Id',
+            'Contact__c',
+            'Contact__r.FirstName',
+            'Contact__r.LastName',
+            'Contact__r.Email',
+            'Lead__c',
+            'Lead__r.FirstName',
+            'Lead__r.LastName',
+            'Lead__r.Email',
+            'Product__c',
+            'Product__r.Car_Model__c',
+            'Car_Center__c',
+            'Car_Center__r.Name',
+            'Car_Center__r.Country__c',
+            'Car_Center__r.City__c',
+            'Car_Center__r.Street__c',
             'Event_Date_Time_Start__c',
             'Event_Date_Time_End__c'
     };
@@ -54,6 +69,15 @@ public class TestDriveManager {
         String query = 'SELECT ' + fieldsToQuery +
                 FROM_TEST_DRIVE +
                 WHERE_STATEMENT + 'Product__c = :selectedProductId';
+
+        return Database.query(query);
+    }
+
+    public static List<Test_Drive__c> getTestDrivesById(Set<Id> testDrivesIds) {
+        String fieldsToQuery = String.join(new List<String>(GENERAL_FIELDS_TO_QUERY_TEST_DRIVE), ',');
+        String query = 'SELECT ' + fieldsToQuery +
+                FROM_TEST_DRIVE +
+                WHERE_STATEMENT + 'Id IN :testDrivesIds';
 
         return Database.query(query);
     }

@@ -21,7 +21,7 @@ public with sharing class TestDriveController {
         try {
             result = TestDriveService.isDateAlreadyBooked(testDriveReservationWrapper);
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'TestDriveController.isDateAlreadyBooked',
                     'failed to get bookings',
                     caughtException
