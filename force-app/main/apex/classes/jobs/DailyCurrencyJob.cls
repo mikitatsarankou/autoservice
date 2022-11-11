@@ -25,7 +25,7 @@ global class DailyCurrencyJob implements Schedulable {
                 }
             }
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'DailyCurrencyJob.execute',
                     'failed to get currency from API',
                     caughtException

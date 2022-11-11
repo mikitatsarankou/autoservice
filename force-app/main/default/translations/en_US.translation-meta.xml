@@ -20,4 +20,12 @@
         <label><!-- dealership name label --></label>
         <name>dealership_name_label</name>
     </customLabels>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Send_Email_For_New_Case</fullName>
+    </flowDefinitions>
+    <flowDefinitions>
+        <flows/>
+        <fullName>Send_Email_For_New_Test_Drive</fullName>
+    </flowDefinitions>
 </Translations>

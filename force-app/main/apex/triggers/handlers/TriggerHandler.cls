@@ -1,4 +1,4 @@
-public virtual class TriggerHandler {
+public without sharing virtual class TriggerHandler {
 
     //constants
     public static String TYPE_AFTER_DELETE = 'afterDelete';

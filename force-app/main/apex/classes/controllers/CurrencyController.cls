@@ -7,7 +7,7 @@ public class CurrencyController {
             List<Currency__c> currencies = CurrencyService.getCustomCurrencies();
             currencyWrappers = CurrencyService.formCurrencyWrapper(currencies);
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'CurrencyController.getCurrencies',
                     'failed to get currency',
                     caughtException

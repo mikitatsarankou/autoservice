@@ -1,201 +1,56 @@
 public without sharing class ClientService {
-    public static Boolean processTestDriveForClient(TestDriveFormWrapper testDriveFormWrapper) {
+    public static ClientService.ProcessResultWrapper processTestDriveForClient(TestDriveService.TestDriveFormWrapper testDriveFormWrapper) {
         try {
             Datetime testDriveDate = Utils.formDatetimeFromStringGTM(testDriveFormWrapper.selectedDate);
-            if (planTestDriveForExistingContact(testDriveFormWrapper, testDriveDate)) {
-                return true;
+            ClientService.ProcessResultWrapper testDriveForExistingContact = TestDriveService.planTestDriveForExistingContact(testDriveFormWrapper, testDriveDate);
+            if (testDriveForExistingContact.result) {
+                return testDriveForExistingContact;
             }
-            if (planTestDriveForExistingLead(testDriveFormWrapper, testDriveDate)) {
-                return true;
+            ClientService.ProcessResultWrapper testDriveForExistingLead = TestDriveService.planTestDriveForExistingLead(testDriveFormWrapper, testDriveDate);
+            if (testDriveForExistingLead.result) {
+                return testDriveForExistingLead;
             }
-            return planTestDriveForNewLead(testDriveFormWrapper, testDriveDate);
+            return TestDriveService.planTestDriveForNewLead(testDriveFormWrapper, testDriveDate);
         } catch (Exception ex) {
-            return false;
+            return ClientService.getNegativeProcessResultWrapper();
         }
     }
 
-    public static Boolean processCaseForClient(CaseFormWrapper caseFormWrapper) {
+    public static ClientService.ProcessResultWrapper processCaseForClient(CaseService.CaseFormWrapper caseFormWrapper) {
         try {
-            if (createCaseForExistingContact(caseFormWrapper)) {
-                return true;
+            ClientService.ProcessResultWrapper caseForExistingContact = CaseService.createCaseForExistingContact(caseFormWrapper);
+            if (caseForExistingContact.result) {
+                return caseForExistingContact;
             }
-            if (createCaseForExistingLead(caseFormWrapper)) {
-                return true;
+            ClientService.ProcessResultWrapper caseForExistingLead = CaseService.createCaseForExistingLead(caseFormWrapper);
+            if (caseForExistingLead.result) {
+                return caseForExistingLead;
             }
-            return createCaseForNotExistingLead(caseFormWrapper);
+            return CaseService.createCaseForNotExistingLead(caseFormWrapper);
         } catch (Exception ex) {
-            return false;
+            return ClientService.getNegativeProcessResultWrapper();
         }
     }
 
-    private static Boolean planTestDriveForNewLead(TestDriveFormWrapper testDriveFormWrapper, Datetime testDriveDate) {
-        Lead newLead = LeadService.newLead(
-                testDriveFormWrapper.name,
-                testDriveFormWrapper.surname,
-                testDriveFormWrapper.email,
-                testDriveFormWrapper.phone
-        );
-
-        TestDriveService.createAndLinkTestDriveToExistingLead(
-                newLead,
-                testDriveFormWrapper.selectedDealershipId,
-                testDriveFormWrapper.selectedProductId,
-                testDriveDate
-        );
-
-        OpportunityService.createAndLinkOpportunityToExistingLead(
-                newLead,
-                testDriveFormWrapper.selectedDealershipId,
-                testDriveFormWrapper.selectedProductId,
-                testDriveDate
-        );
-
-        return true;
+    public static List<Case> getCasesById(Set<Id> casesIds) {
+        return CaseService.getCasesById(casesIds);
     }
-    private static Boolean planTestDriveForExistingLead(TestDriveFormWrapper testDriveFormWrapper, Datetime testDriveDate) {
-        List<Lead> leads = LeadService.getLeadByEmailOrPhone(testDriveFormWrapper.email, testDriveFormWrapper.phone);
 
-        if (leads.isEmpty()) {
-            return false;
+    public static ProcessResultWrapper getProcessResultWrapper(Boolean result, Set<Id> recordsIds) {
+        return new ProcessResultWrapper(result, recordsIds);
+    }
+
+    public static ProcessResultWrapper getNegativeProcessResultWrapper() {
+        return new ProcessResultWrapper(false, new Set<Id>());
+    }
+
+    public without sharing class ProcessResultWrapper {
+        public Boolean result;
+        public Set<Id> recordsIds;
+
+        public ProcessResultWrapper(Boolean result, Set<Id> recordsIds) {
+            this.result = result;
+            this.recordsIds = recordsIds;
         }
-
-        Lead leadToUpdate = leads.get(0);
-        Lead updatedLead = LeadManager.updateLeadInfo(leadToUpdate);
-        TestDriveService.createAndLinkTestDriveToExistingLead(
-                updatedLead,
-                testDriveFormWrapper.selectedDealershipId,
-                testDriveFormWrapper.selectedProductId,
-                testDriveDate
-        );
-
-        OpportunityService.createAndLinkOpportunityToExistingLead(
-                updatedLead,
-                testDriveFormWrapper.selectedDealershipId,
-                testDriveFormWrapper.selectedProductId,
-                testDriveDate
-        );
-
-        return true;
     }
-    private static Boolean planTestDriveForExistingContact(TestDriveFormWrapper testDriveFormWrapper, Datetime testDriveDate) {
-        List<Contact> contacts = ContactService.getContactByEmailOrPhone(testDriveFormWrapper.email, testDriveFormWrapper.phone);
-
-        if (contacts.isEmpty()) {
-            return false;
-        }
-
-        Contact contactToUpdate = contacts.get(0);
-        Contact updatedContact = ContactManager.updateContactInfo(contactToUpdate);
-        TestDriveService.createAndLinkTestDriveToExistingContact(
-                updatedContact,
-                testDriveFormWrapper.selectedDealershipId,
-                testDriveFormWrapper.selectedProductId,
-                testDriveDate
-        );
-
-        OpportunityService.createAndLinkOpportunityToExistingContact(
-                updatedContact,
-                testDriveFormWrapper.selectedDealershipId,
-                testDriveFormWrapper.selectedProductId,
-                testDriveDate
-        );
-
-        return true;
-    }
-
-    private static Boolean createCaseForExistingContact(CaseFormWrapper caseFormWrapper) {
-        List<Contact> contacts = ContactService.getContactByEmailOrPhone(
-                caseFormWrapper.email,
-                caseFormWrapper.phone
-        );
-
-        if (contacts.isEmpty()) {
-            return false;
-        }
-
-        Contact contactToUpdate = contacts.get(0);
-        Contact updatedContact = ContactManager.updateContactInfo(contactToUpdate);
-        CaseManager.newCaseForExistingContact(
-                updatedContact,
-                caseFormWrapper.email,
-                caseFormWrapper.subject,
-                caseFormWrapper.message,
-                caseFormWrapper.selectedDealershipId
-        );
-
-        return true;
-    }
-
-    private static Boolean createCaseForExistingLead(CaseFormWrapper caseFormWrapper) {
-        List<Lead> leads = LeadService.getLeadByEmailOrPhone(
-                caseFormWrapper.email,
-                caseFormWrapper.phone
-        );
-
-        if (leads.isEmpty()) {
-            return false;
-        }
-        Lead leadToUpdate = leads.get(0);
-        Lead updatedLead = LeadManager.updateLeadInfo(leadToUpdate);
-        CaseManager.newCaseForExistingLead(
-                updatedLead,
-                caseFormWrapper.email,
-                caseFormWrapper.subject,
-                caseFormWrapper.message,
-                caseFormWrapper.selectedDealershipId
-        );
-        return true;
-    }
-
-    private static Boolean createCaseForNotExistingLead(CaseFormWrapper caseFormWrapper) {
-        Lead newLead = LeadService.newLead(
-                caseFormWrapper.name,
-                caseFormWrapper.surname,
-                caseFormWrapper.email,
-                caseFormWrapper.phone
-        );
-        CaseManager.newCaseForExistingLead(
-                newLead,
-                caseFormWrapper.email,
-                caseFormWrapper.subject,
-                caseFormWrapper.message,
-                caseFormWrapper.selectedDealershipId
-        );
-        return true;
-    }
-
-    public class CaseFormWrapper {
-        @AuraEnabled
-        public String name { get; set; }
-        @AuraEnabled
-        public String surname { get; set; }
-        @AuraEnabled
-        public String email { get; set; }
-        @AuraEnabled
-        public String phone { get; set; }
-        @AuraEnabled
-        public String selectedDealershipId { get; set; }
-        @AuraEnabled
-        public String subject { get; set; }
-        @AuraEnabled
-        public String message { get; set; }
-    }
-
-    public class TestDriveFormWrapper {
-        @AuraEnabled
-        public String name { get; set; }
-        @AuraEnabled
-        public String surname { get; set; }
-        @AuraEnabled
-        public String email { get; set; }
-        @AuraEnabled
-        public String phone { get; set; }
-        @AuraEnabled
-        public String selectedDealershipId { get; set; }
-        @AuraEnabled
-        public String selectedProductId { get; set; }
-        @AuraEnabled
-        public String selectedDate { get; set; }
-    }
-
 }

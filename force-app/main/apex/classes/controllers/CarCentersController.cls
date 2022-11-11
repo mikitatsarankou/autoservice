@@ -7,11 +7,13 @@ public class CarCentersController {
             List<Car_Center__c> carCenters = getCarCentersLocations();
             dealershipsWithProductsWrappers = CarCentersService.getDealershipsWithProductsWrappers(carCenters);
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'CarCentersController.getDealershipsWithProductsWrapper',
                     'failed to get dealerships',
                     caughtException
             ).createNewInternalMessage();
+
+
         }
         return dealershipsWithProductsWrappers;
     }
@@ -23,7 +25,7 @@ public class CarCentersController {
             List<Car_Center__c> carCenters = getCarCentersLocations();
             carCenterLocationsWrappers = getCarCenterLocationsToDisplayWrappers(carCenters);
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'CarCentersController.getResultList',
                     'failed to get dealerships',
                     caughtException
@@ -38,7 +40,7 @@ public class CarCentersController {
         try {
             carCenters = CarCentersService.getCarCentersLocations();
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'CarCentersController.getCarCentersLocations',
                     'failed to get dealerships',
                     caughtException
@@ -53,7 +55,7 @@ public class CarCentersController {
         try {
             carCenterLocationsWrappers = CarCentersService.getCarCenterLocationsToDisplayWrappers(carCenters);
         } catch (Exception caughtException) {
-            new InternalMessageService(
+            insert new InternalMessageService(
                     'CarCentersController.getCarCenterLocationsToDisplayWrappers',
                     'failed to get dealerships',
                     caughtException

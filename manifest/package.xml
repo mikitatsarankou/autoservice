@@ -42,6 +42,11 @@
         <name>StaticResource</name>
     </types>
     <types>
+        <members>Send_Email_For_New_Test_Drive</members>
+        <members>Send_Email_For_New_Case</members>
+        <name>Flow</name>
+    </types>
+    <types>
         <members>*</members>
         <name>Translations</name>
     </types>
