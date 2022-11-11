@@ -1,6 +1,12 @@
 public without sharing class CaseService {
 
-    public static void sendEmailForNewCases(Set<Id> newCasesIds) {
+    @InvocableMethod(Label = 'Send Email For New Case')
+    public static void sendEmailForNewCases(List<Case> newCases) {
+        Set<Id> newCasesIds = new Set<Id>();
+        for (Case newCase : newCases) {
+            newCasesIds.add(newCase.Id);
+        }
+
         Map<Id, Case> newCasesByIdMap = new Map<Id, Case>(
                 ClientService.getCasesById(newCasesIds)
         );

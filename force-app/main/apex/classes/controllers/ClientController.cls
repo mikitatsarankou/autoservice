@@ -6,7 +6,6 @@ public without sharing class ClientController {
         try {
             ClientService.ProcessResultWrapper processResultWrapper = ClientService.processTestDriveForClient(testDriveFormWrapper);
             if (processResultWrapper.result) {
-                TestDriveService.sendEmailForNewTestDrives(processResultWrapper.recordsIds);
                 result = true;
             }
         } catch (Exception caughtException) {
@@ -23,11 +22,8 @@ public without sharing class ClientController {
     public static Boolean processCaseForClient(CaseService.CaseFormWrapper caseFormWrapper) {
         Boolean result = false;
         try {
-            system.debug('processCaseForClient');
             ClientService.ProcessResultWrapper processResultWrapper = ClientService.processCaseForClient(caseFormWrapper);
-            system.debug('processResultWrapper: ' + processResultWrapper);
             if (processResultWrapper.result) {
-                CaseService.sendEmailForNewCases(processResultWrapper.recordsIds);
                 result = true;
             }
         } catch (Exception caughtException) {

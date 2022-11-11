@@ -85,8 +85,16 @@ public without sharing class EmailMessageService {
     public static void sendEmails(List<Messaging.SingleEmailMessage> mailList) {
         system.debug(mailList);
         if (!mailList.isEmpty()) {
-
-            Messaging.SendEmailResult[] results = Messaging.sendEmail(mailList);
+            Messaging.SendEmailResult[] results;
+            try {
+                results = Messaging.sendEmail(mailList);
+            } catch (Exception caughtException) {
+                new InternalMessageService(
+                        'EmailMessageService.sendEmails',
+                        'failed to send email',
+                        caughtException
+                ).createNewInternalMessageForFailedEmail();
+            }
 
             system.debug(results);
 

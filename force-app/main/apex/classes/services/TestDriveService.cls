@@ -140,7 +140,13 @@ public class TestDriveService {
         );
     }
 
-    public static void sendEmailForNewTestDrives(Set<Id> newTestDrivesIds) {
+    @InvocableMethod(Label = 'Send Email For New Test Drive')
+    public static void sendEmailForNewTestDrives(List<Test_Drive__c> newTestDrives) {
+        Set<Id> newTestDrivesIds = new Set<Id>();
+        for (Test_Drive__c testDrive : newTestDrives) {
+            newTestDrivesIds.add(testDrive.Id);
+        }
+
         Map<Id, Test_Drive__c> newTestDrivesById = new Map<Id, Test_Drive__c>(
                 TestDriveService.getTestDrivesById(newTestDrivesIds)
         );
