@@ -18,11 +18,12 @@
     </types>
     <types>
         <members>dealership guest user Profile</members>
+        <members>dealership Profile</members>
         <name>Profile</name>
     </types>
     <types>
-        <members>dealership</members>
-        <name>CustomSite</name>
+        <members>guest_user_permission_set</members>
+        <name>PermissionSet</name>
     </types>
     <types>
         <members>*</members>
@@ -42,9 +43,13 @@
         <name>StaticResource</name>
     </types>
     <types>
-        <members>Send_Email_For_New_Test_Drive</members>
-        <members>Send_Email_For_New_Case</members>
+        <members>send_new_case_email_from_flow</members>
+        <members>send_new_test_drive_email_from_flow</members>
         <name>Flow</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>ExperienceBundle</name>
     </types>
     <types>
         <members>*</members>
