@@ -36,7 +36,6 @@ public without sharing class ProductsManager {
                 FROM_PRODUCT2 +
                 WHERE_STATEMENT + 'Name' + LIKE_STATEMENT + ':audiSearchKey' +
                 AND_STATEMENT + 'Car_Center__r.City__c' + LIKE_STATEMENT + ':citySearchKey';
-        system.debug(query);
         return Database.query(query);
     }
 

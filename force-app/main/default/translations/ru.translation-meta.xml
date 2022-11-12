@@ -21,11 +21,34 @@
         <name>dealership_name_label</name>
     </customLabels>
     <flowDefinitions>
-        <flows/>
-        <fullName>Send_Email_For_New_Case</fullName>
+        <flows>
+            <textTemplates>
+                <name>contactbody</name>
+            </textTemplates>
+            <textTemplates>
+                <name>defaultemail</name>
+            </textTemplates>
+            <textTemplates>
+                <name>leadbody</name>
+            </textTemplates>
+            <textTemplates>
+                <name>subject</name>
+            </textTemplates>
+        </flows>
+        <fullName>send_new_case_email_from_flow</fullName>
     </flowDefinitions>
     <flowDefinitions>
-        <flows/>
-        <fullName>Send_Email_For_New_Test_Drive</fullName>
+        <flows>
+            <textTemplates>
+                <name>contactbody</name>
+            </textTemplates>
+            <textTemplates>
+                <name>leadbody</name>
+            </textTemplates>
+            <textTemplates>
+                <name>subject</name>
+            </textTemplates>
+        </flows>
+        <fullName>send_new_test_drive_email_from_flow</fullName>
     </flowDefinitions>
 </Translations>

@@ -140,7 +140,7 @@ public class TestDriveService {
         );
     }
 
-    @InvocableMethod(Label = 'Send Email For New Test Drive')
+    //implemented by flow
     public static void sendEmailForNewTestDrives(List<Test_Drive__c> newTestDrives) {
         Set<Id> newTestDrivesIds = new Set<Id>();
         for (Test_Drive__c testDrive : newTestDrives) {

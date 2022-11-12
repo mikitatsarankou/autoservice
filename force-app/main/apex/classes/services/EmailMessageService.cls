@@ -34,7 +34,6 @@ public without sharing class EmailMessageService {
                     'end date EndDate';
 
     public static void sendEmailsForJustCreatedCases(List<NewCaseEmailFieldsWrapper> emailFieldsWrappers) {
-        system.debug('sendEmailsForJustCreatedCases');
         List<Messaging.SingleEmailMessage> mailList = new List<Messaging.SingleEmailMessage>();
 
         for (NewCaseEmailFieldsWrapper emailFieldsWrapper : emailFieldsWrappers) {
@@ -83,7 +82,6 @@ public without sharing class EmailMessageService {
     }
 
     public static void sendEmails(List<Messaging.SingleEmailMessage> mailList) {
-        system.debug(mailList);
         if (!mailList.isEmpty()) {
             Messaging.SendEmailResult[] results;
             try {
@@ -95,8 +93,6 @@ public without sharing class EmailMessageService {
                         caughtException
                 ).createNewInternalMessageForFailedEmail();
             }
-
-            system.debug(results);
 
             List<Internal_Message__c> internalMessages = new List<Internal_Message__c>();
             for (Messaging.SendEmailResult result : results) {

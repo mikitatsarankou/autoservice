@@ -1,6 +1,6 @@
 public without sharing class CaseService {
 
-    @InvocableMethod(Label = 'Send Email For New Case')
+    //implemented by flow
     public static void sendEmailForNewCases(List<Case> newCases) {
         Set<Id> newCasesIds = new Set<Id>();
         for (Case newCase : newCases) {

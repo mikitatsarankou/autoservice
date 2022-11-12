@@ -11,7 +11,12 @@ public without sharing class ClientService {
                 return testDriveForExistingLead;
             }
             return TestDriveService.planTestDriveForNewLead(testDriveFormWrapper, testDriveDate);
-        } catch (Exception ex) {
+        } catch (Exception caughtException) {
+            insert new InternalMessageService(
+                    'ClientService.processTestDriveForClient',
+                    'failed to processTestDriveForClient',
+                    caughtException
+            ).createNewInternalMessage();
             return ClientService.getNegativeProcessResultWrapper();
         }
     }
@@ -27,7 +32,12 @@ public without sharing class ClientService {
                 return caseForExistingLead;
             }
             return CaseService.createCaseForNotExistingLead(caseFormWrapper);
-        } catch (Exception ex) {
+        } catch (Exception caughtException) {
+            insert new InternalMessageService(
+                    'ClientService.processCaseForClient',
+                    'failed to processCaseForClient',
+                    caughtException
+            ).createNewInternalMessage();
             return ClientService.getNegativeProcessResultWrapper();
         }
     }
