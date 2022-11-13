@@ -1,8 +1,12 @@
+.body {
+    width: auto;
+}
+
 .language-switcher {
     position: fixed;
     right: 0;
-    margin-top: 10px;
-    margin-right: 10px;
+    margin-top: 1%;
+    margin-right: 1%;
 }
 
 .slds-checkbox_faux {

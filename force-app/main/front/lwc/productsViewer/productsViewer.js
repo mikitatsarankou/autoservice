@@ -12,29 +12,35 @@ export default class ProductsViewer extends LightningElement {
         DEFAULT_AUDI_LOGO: 'https://tsarankou-dev-ed.my.salesforce.com/sfc/dist/version/download/?oid=00D2w00000BKw6b&ids=0682w00000M1zDpAAJ&d=/a/2w000000QAhf/KH1DI0I_W4KGqhAxFRfhJZAPMQZHKvTzXcm1T_3SiAs&operationContext=DELIVERY&viewId=05H2w000002DpJmEAK&dpt=',
         DEFAULT_CURRENCY: 'USD',
         MAX_PRODUCTS_TO_SHOW: 3,
-        CARD_PX_WIDTH_SIZE: 550,
-        BUTTONS_DEFAULT_PX_WIDTH_SIZE: 1650
+        CARD_PX_WIDTH_SIZE: 320,
+        BUTTONS_DEFAULT_PX_WIDTH_SIZE: 1580
     }
 
-    @track currentCurrency = this.CONSTANT.DEFAULT_CURRENCY;
-    @track error;
-    @track displayProducts = false;
-    @track displayPrices = false;
+    screenWidthIsLessThan1024;
+    screenWidth;
 
-    @track recordsList = [];
-    @track currentProducts = [];
-    @track productsByCity = [];
-    @track productsWithNewCurrencyPrice = [];
+    currentCurrency = this.CONSTANT.DEFAULT_CURRENCY;
+    error;
+    displayProducts = false;
+    displayPrices = false;
 
-    @track defaultProducts = [];
+    recordsList = [];
+    currentProducts = [];
+    productsByCity = [];
+    productsWithNewCurrencyPrice = [];
 
-    @track currentProductsCount;
+    defaultProducts = [];
 
-    @track currentRightPosition = 0;
-    @track currentLeftPosition = 0;
-    @track currentButtonsWidth = 0;
+    currentLeftPosition = 0;
 
     isRendered = false;
+
+    connectedCallback() {
+        if (!this.isRendered) {
+            this.screenWidthIsLessThan1024 = window.screen.width <= 1024;
+            this.screenWidth = window.screen.width;
+        }
+    }
 
     renderedCallback() {
 
@@ -71,9 +77,6 @@ export default class ProductsViewer extends LightningElement {
                     isAttachmentsExists: imageNotEmpty,
                     Attachment: attachmentLink
                 });
-
-                this.handleResizeButtons(this.recordsList.length);
-
             }
         } catch (error) {
             this.error = error;
@@ -226,17 +229,15 @@ export default class ProductsViewer extends LightningElement {
     }
 
     handleResizeButtons(currentProductsLength) {
-        let buttonsDiv = this.template.querySelector(".buttons-area-space");
-        let widthToSet = 0;
-        if (currentProductsLength < this.CONSTANT.MAX_PRODUCTS_TO_SHOW) {
-            widthToSet = this.CONSTANT.BUTTONS_DEFAULT_PX_WIDTH_SIZE - this.CONSTANT.CARD_PX_WIDTH_SIZE;
-        } else if (this.currentButtonsWidth === this.CONSTANT.BUTTONS_DEFAULT_PX_WIDTH_SIZE) {
-            return;
-        } else if (this.currentButtonsWidth !== this.CONSTANT.BUTTONS_DEFAULT_PX_WIDTH_SIZE && currentProductsLength > this.CONSTANT.MAX_PRODUCTS_TO_SHOW) {
-            widthToSet = this.CONSTANT.BUTTONS_DEFAULT_PX_WIDTH_SIZE;
-        }
-        this.currentButtonsWidth = widthToSet;
-        //buttonsDiv.style.width = widthToSet + 'px';
+
+    }
+
+    get sliderVisibleDiv() {
+        return this.screenWidthIsLessThan1024 ? "slider-visible-mobile" : "slider-visible";
+    }
+
+    get sliderContentDiv() {
+        return this.screenWidthIsLessThan1024 ? "slider-content-mobile" : "slider-content";
     }
 
     handleResizeLeftPosition(currentProductsLength) {
