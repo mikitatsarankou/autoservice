@@ -6,5 +6,7 @@
     <masterLabel>Car Centers Map</masterLabel>
     <targets>
         <target>lightning__AppPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
     </targets>
 </LightningComponentBundle>
